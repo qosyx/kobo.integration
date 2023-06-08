@@ -1,7 +1,7 @@
 import { Controller, Get, Query, Req } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ClientService } from './client/client.service';
-import { ApiQuery } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { typeVehicule } from './utils/taxe';
 
 
@@ -12,12 +12,13 @@ export class AppController {
     private clientService: ClientService,
   ) {}
 
-  
+  @ApiTags("TVM")
   @Get()
   getHello(): string {
     return this.appService.getHello();
   }
 
+  @ApiTags("TVM")
   @Get('/pay', )
   @ApiQuery({ name: 'immatriculatioNumber', type: String })
   @ApiQuery({ name: 'year', type: String })
@@ -28,12 +29,14 @@ export class AppController {
       year,
     );
   }
+  @ApiTags("TVM")
   @Get('/state-pay')
   @ApiQuery({ name: 'immatriculatioNumber', type: String })
   async getStatOfPay(@Req() request) {
     const { immatriculatioNumber } = request.query;
     return await this.clientService.getStatOfPay(immatriculatioNumber);
   }
+  @ApiTags("TVM")
   @Get('/liquidation')
   @ApiQuery({ name: 'immatriculatioNumber', type: String })
   @ApiQuery({ name: 'vehiculeType', enum: typeVehicule })
@@ -49,8 +52,8 @@ export class AppController {
       year,
     );
   }
+  @ApiTags("TVM")
   @Get('/amount')
-  @Get('/all')
   @ApiQuery({ name: 'immatriculatioNumber', type: String })
   @ApiQuery({ name: 'vehiculeType', enum: typeVehicule })
   async all(@Query() query) {
