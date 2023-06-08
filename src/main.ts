@@ -6,8 +6,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
   const config = new DocumentBuilder()
-  .setTitle('Test taxes')
-  .setDescription('The taxes API description')
+  .setTitle('TVM API Documentation')
+  .setDescription('TVM API Documentation')
   .setVersion('1.0')
   .addTag('taxes')
   .build();
