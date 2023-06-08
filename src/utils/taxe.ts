@@ -45,3 +45,8 @@ export function calcultaxe(
 
   return taxe;
 }
+
+export enum typeVehicule {
+  Autre = 'AUTRE',
+  TRICYCLE = 'TRICYCLE',
+}

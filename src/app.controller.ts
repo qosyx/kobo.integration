@@ -2,7 +2,7 @@ import { Controller, Get, Query, Req } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ClientService } from './client/client.service';
 import { ApiQuery } from '@nestjs/swagger';
-
+import { typeVehicule } from './utils/taxe';
 @Controller()
 export class AppController {
   constructor(
@@ -33,7 +33,7 @@ export class AppController {
   }
   @Get('/liquidation')
   @ApiQuery({ name: 'immatriculatioNumber', type: String })
-  @ApiQuery({ name: 'vehiculeType', type: String })
+  @ApiQuery({ name: 'vehiculeType', enum: typeVehicule })
   @ApiQuery({ name: 'year', type: String })
   async liquidation(@Req() request) {
     console.log(request.query);
@@ -49,7 +49,7 @@ export class AppController {
 
   @Get('/all')
   @ApiQuery({ name: 'immatriculatioNumber', type: String })
-  @ApiQuery({ name: 'vehiculeType', type: String })
+  @ApiQuery({ name: 'vehiculeType', enum: typeVehicule })
   async all(@Query() query) {
     console.log(query);
     const { immatriculatioNumber, vehiculeType } = query;
