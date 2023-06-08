@@ -1,6 +1,12 @@
 import { Controller, Get, Query, Req } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ClientService } from './client/client.service';
+import { ApiQuery } from '@nestjs/swagger';
+
+
+
+
+
 
 @Controller()
 export class AppController {
@@ -15,6 +21,8 @@ export class AppController {
   }
 
   @Get('/pay')
+  @ApiQuery({ name: 'immatriculatioNumber', type: String })
+  @ApiQuery({ name: 'year', type: String })
   async getPaiement(@Req() request) {
     const { immatriculatioNumber, year } = request.query;
     return await this.clientService.getPaiementStatut(
@@ -23,11 +31,15 @@ export class AppController {
     );
   }
   @Get('/sate-pay')
+  @ApiQuery({ name: 'immatriculatioNumber', type: String })
   async getStatOfPay(@Req() request) {
     const { immatriculatioNumber } = request.query;
     return await this.clientService.getStatOfPay(immatriculatioNumber);
   }
   @Get('/liquidation')
+  @ApiQuery({ name: 'immatriculatioNumber', type: String })
+  @ApiQuery({ name: 'vehiculeType', type: String })
+  @ApiQuery({ name: 'year', type: String })
   async liquidation(@Req() request) {
     console.log(request.query);
     const { immatriculatioNumber, vehiculeType, year } = request.query;
@@ -41,6 +53,8 @@ export class AppController {
   }
 
   @Get('/all')
+  @ApiQuery({ name: 'immatriculatioNumber', type: String })
+  @ApiQuery({ name: 'vehiculeType', type: String })
   async all(@Query() query) {
     console.log(query);
     const { immatriculatioNumber, vehiculeType } = query;

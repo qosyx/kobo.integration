@@ -48,3 +48,4 @@ function calcultaxe(puissanceMoteur, poidsCharge, type, nombreDePlace) {
     
     return taxe;
 }
+
