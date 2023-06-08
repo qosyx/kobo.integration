@@ -47,7 +47,7 @@ export class AppController {
     );
   }
 
-  @Get('/all')
+  @Get('/amount')
   @ApiQuery({ name: 'immatriculatioNumber', type: String })
   @ApiQuery({ name: 'vehiculeType', enum: typeVehicule })
   async all(@Query() query) {
