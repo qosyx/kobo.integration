@@ -22,7 +22,7 @@ export class AppController {
       year,
     );
   }
-  @Get('/sate-pay')
+  @Get('/state-pay')
   async getStatOfPay(@Req() request) {
     const { immatriculatioNumber } = request.query;
     return await this.clientService.getStatOfPay(immatriculatioNumber);

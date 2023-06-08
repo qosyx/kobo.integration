@@ -2,6 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
 import { AxiosError, AxiosRequestConfig } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
+import { calcultaxe } from '../utils/taxe';
 const requestConfig: AxiosRequestConfig = {
   headers: {
     'Uxp-Client': 'BJ/GOV/PNS/PRE-PROD-PORTAIL',
@@ -100,14 +101,24 @@ export class ClientService {
     let amount = 0;
     let penalite = 0;
     let montantDu = 0;
+    let infoLiquidation: any;
     for (let i = 0; i < year.length; i++) {
       const r = await this.liquidation(immatriculationNumber, marque, year[i]);
       amount += r['totalDu'];
       penalite += r['penalite'];
       montantDu += r['montantDu'];
-      this.liquidation(immatriculationNumber, marque, year[i]);
+      infoLiquidation = r;
+      // this.liquidation(immatriculationNumber, marque, year[i]);
     }
+    console.log(infoLiquidation.data.object.vehicule.poidsCharge);
+    const taxe = calcultaxe(
+      infoLiquidation.data.object.vehicule.puissanceMoteur,
+      infoLiquidation.data.object.vehicule.poidsCharge,
+      infoLiquidation.data.object.vehicule.typeTaxe.code,
+      infoLiquidation.data.object.vehicule.poidsCharge,
+    );
     return {
+      taxe,
       amount,
       penalite,
       montantDu,
