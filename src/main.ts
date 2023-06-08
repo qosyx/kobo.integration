@@ -9,7 +9,6 @@ async function bootstrap() {
   .setTitle('TVM API Documentation')
   .setDescription('TVM API Documentation')
   .setVersion('1.0')
-  .addTag('taxes')
   .build();
  const document = SwaggerModule.createDocument(app, config);
  SwaggerModule.setup('api', app, document);
