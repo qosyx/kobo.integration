@@ -117,7 +117,8 @@ export class ClientService {
       infoLiquidation.data.object.vehicule.typeTaxe.code,
       infoLiquidation.data.object.vehicule.poidsCharge,
     );
-    const totalAmount = taxe.toFixed(2) + amount.toFixed(2);
+    const total = taxe + amount;
+    const totalAmount = total.toFixed(2);
     return {
       taxe,
       amount,
