@@ -4,22 +4,20 @@ import { ClientService } from './client/client.service';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { typeVehicule } from './utils/taxe';
 
-
 @Controller()
+@ApiTags('TVM')
 export class AppController {
   constructor(
     private readonly appService: AppService,
     private clientService: ClientService,
   ) {}
 
-  @ApiTags("TVM")
   @Get()
   getHello(): string {
     return this.appService.getHello();
   }
 
-  @ApiTags("TVM")
-  @Get('/pay', )
+  @Get('/pay')
   @ApiQuery({ name: 'immatriculatioNumber', type: String })
   @ApiQuery({ name: 'year', type: String })
   async getPaiement(@Req() request) {
@@ -29,14 +27,12 @@ export class AppController {
       year,
     );
   }
-  @ApiTags("TVM")
   @Get('/state-pay')
   @ApiQuery({ name: 'immatriculatioNumber', type: String })
   async getStatOfPay(@Req() request) {
     const { immatriculatioNumber } = request.query;
     return await this.clientService.getStatOfPay(immatriculatioNumber);
   }
-  @ApiTags("TVM")
   @Get('/liquidation')
   @ApiQuery({ name: 'immatriculatioNumber', type: String })
   @ApiQuery({ name: 'vehiculeType', enum: typeVehicule })
@@ -52,7 +48,7 @@ export class AppController {
       year,
     );
   }
-  @ApiTags("TVM")
+
   @Get('/amount')
   @ApiQuery({ name: 'immatriculatioNumber', type: String })
   @ApiQuery({ name: 'vehiculeType', enum: typeVehicule })

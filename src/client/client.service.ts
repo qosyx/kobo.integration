@@ -117,11 +117,13 @@ export class ClientService {
       infoLiquidation.data.object.vehicule.typeTaxe.code,
       infoLiquidation.data.object.vehicule.poidsCharge,
     );
+    const totalAmount = taxe + amount;
     return {
       taxe,
       amount,
       penalite,
       montantDu,
+      totalAmount,
     };
   }
 }
