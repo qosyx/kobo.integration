@@ -8,15 +8,15 @@ export function calcultaxe(dateEcheance: string, type: string) {
   const date = parse(dateEcheance, 'yyyy-MM-dd', new Date());
   const comparisonResultDesc = compareDesc(new Date(), date);
 
-  if (type === 'Véhicule Taxi') {
+  if (type === 'CTTA') {
     Tresor = 1000;
     CNSR = 5500;
     taxe = Timbres + Tresor + CNSR;
-  } else if (type === 'Véhicule particulier PTAC<3500kg') {
+  } else if (type === 'CTVL') {
     Tresor = 2000;
     CNSR = 11000;
     taxe = Timbres + Tresor + CNSR;
-  } else if (type === 'Véhicule poids lourds PTAC>3500kg') {
+  } else if (type === 'CTPL') {
     Tresor = 4000;
     CNSR = 13000;
     taxe = Timbres + Tresor + CNSR;

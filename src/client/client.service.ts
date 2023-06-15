@@ -152,22 +152,21 @@ export class ClientService {
       // this.liquidation(immatriculationNumber, marque, year[i]);
     }
     console.log(infoLiquidation.data.object.vehicule.poidsCharge);
-    // const taxe = calcultaxe(
-    //   infoLiquidation.data.object.vehicule.puissanceMoteur,
-    //   infoLiquidation.data.object.vehicule.poidsCharge,
-    // );
-    const taxe = '';
+
     const cnsr = await this.getEtatVehicule(immatriculationNumber);
     console.log(fiscale[0]);
-    const test = formatDistance(subDays(new Date(), 3), new Date(), {
-      addSuffix: true,
-    });
-    const dateString = '2023-06-15';
-    const date = parse(dateString, 'yyyy-MM-dd', new Date());
-    console.log(date);
-    console.log('test', test);
+    // const test = formatDistance(subDays(new Date(), 3), new Date(), {
+    //   addSuffix: true,
+    // });
+    // const dateString = '2023-06-15';
+    // const date = parse(dateString, 'yyyy-MM-dd', new Date());
+    // console.log(date);
+    // console.log('test', test);
 
-    const { amount, penalite, montantDu } = fiscale[0];
+    let { amount, penalite, montantDu } = fiscale[0];
+    amount = amount.toFixed(2);
+    penalite = penalite.toFixed(2);
+    montantDu = montantDu.toFixed(2);
     const {
       puissanceMoteur,
       chassis,
@@ -186,6 +185,7 @@ export class ClientService {
       periodevalidite,
       agences,
     } = cnsr;
+    const taxe = calcultaxe(dateecheance, typevehicule).toFixed(2);
     return {
       taxe,
       puissanceMoteur,
