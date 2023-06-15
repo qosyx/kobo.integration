@@ -3,6 +3,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { AxiosError, AxiosRequestConfig } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
 import { calcultaxe } from '../utils/taxe';
+import { parse, formatDistance, subDays, format } from 'date-fns';
+
 const requestConfig: AxiosRequestConfig = {
   headers: {
     'Uxp-Client': 'BJ/GOV/PNS/PRE-PROD-PORTAIL',
@@ -158,8 +160,14 @@ export class ClientService {
     );
     const cnsr = await this.getEtatVehicule(immatriculationNumber);
     console.log(fiscale[0]);
-    // const amountToPay = fiscale[0]['amount'];
-    // const penalite = fiscale[0]['penalite'];
+    const test = formatDistance(subDays(new Date(), 3), new Date(), {
+      addSuffix: true,
+    });
+    const dateString = '2023-06-15';
+    const date = parse(dateString, 'yyyy-MM-dd', new Date());
+    console.log(date);
+    console.log('test', test);
+
     const { amount, penalite, montantDu } = fiscale[0];
     const {
       puissanceMoteur,
