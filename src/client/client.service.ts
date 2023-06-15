@@ -152,12 +152,11 @@ export class ClientService {
       // this.liquidation(immatriculationNumber, marque, year[i]);
     }
     console.log(infoLiquidation.data.object.vehicule.poidsCharge);
-    const taxe = calcultaxe(
-      infoLiquidation.data.object.vehicule.puissanceMoteur,
-      infoLiquidation.data.object.vehicule.poidsCharge,
-      infoLiquidation.data.object.vehicule.typeTaxe.code,
-      infoLiquidation.data.object.vehicule.poidsCharge,
-    );
+    // const taxe = calcultaxe(
+    //   infoLiquidation.data.object.vehicule.puissanceMoteur,
+    //   infoLiquidation.data.object.vehicule.poidsCharge,
+    // );
+    const taxe = '';
     const cnsr = await this.getEtatVehicule(immatriculationNumber);
     console.log(fiscale[0]);
     const test = formatDistance(subDays(new Date(), 3), new Date(), {
