@@ -21,10 +21,35 @@ const requestConfig3: AxiosRequestConfig = {
     'Uxp-Service': 'BJ/GOV/DGI/TVM/Liquidation_TVM/v1',
   },
 };
+const requestEtatVehicule: AxiosRequestConfig = {
+  headers: {
+    'Uxp-Client': 'BJ/GOV/PNS/PRE-PROD-PORTAIL',
+    'Uxp-Service': 'BJ/GOV/CNSR/SECUROUTE/etatvoiture/v1',
+  },
+};
 @Injectable()
 export class ClientService {
   private readonly logger = new Logger(ClientService.name);
   constructor(private readonly httpService: HttpService) {}
+
+  async getEtatVehicule(immatriculationNumber: string): Promise<any> {
+    this.logger.log('cnsr etat statut');
+    const { data } = await firstValueFrom(
+      this.httpService
+        .get<any>(
+          `http://pns-ss01.xroad.bj:8081/restapi/${immatriculationNumber}`,
+          requestEtatVehicule,
+        )
+        .pipe(
+          catchError((error: AxiosError) => {
+            this.logger.error(error.response.data);
+            throw 'An error happened!';
+          }),
+        ),
+    );
+    console.log('dddddddddddddddddd', data[0]);
+    return data[0];
+  }
 
   async getPaiementStatut(
     immatriculationNumber: string,
@@ -96,18 +121,32 @@ export class ClientService {
   }
 
   async getAllTvmAmount(immatriculationNumber: string, marque: string) {
-    const year = await this.getStatOfPay(immatriculationNumber);
+    let year = await this.getStatOfPay(immatriculationNumber);
+    year = year.sort((a, b) => b - a);
     console.log(year);
-    let amount = 0;
-    let penalite = 0;
-    let montantDu = 0;
+    const fiscale: Array<any> = [];
     let infoLiquidation: any;
     for (let i = 0; i < year.length; i++) {
-      const r = await this.liquidation(immatriculationNumber, marque, year[i]);
-      amount += r['totalDu'];
-      penalite += r['penalite'];
-      montantDu += r['montantDu'];
-      infoLiquidation = r;
+      try {
+        const r = await this.liquidation(
+          immatriculationNumber,
+          marque,
+          year[i],
+        );
+        const data = {
+          amount: r['totalDu'],
+          penalite: r['penalite'],
+          montantDu: r['montantDu'],
+          year: year[i],
+        };
+        console.log(data);
+
+        fiscale.push(data);
+        infoLiquidation = r;
+      } catch (error) {
+        console.log(error.message);
+      }
+
       // this.liquidation(immatriculationNumber, marque, year[i]);
     }
     console.log(infoLiquidation.data.object.vehicule.poidsCharge);
@@ -117,14 +156,50 @@ export class ClientService {
       infoLiquidation.data.object.vehicule.typeTaxe.code,
       infoLiquidation.data.object.vehicule.poidsCharge,
     );
-    const total = taxe + amount;
-    const totalAmount = total.toFixed(2);
+    const cnsr = await this.getEtatVehicule(immatriculationNumber);
+    console.log(fiscale[0]);
+    // const amountToPay = fiscale[0]['amount'];
+    // const penalite = fiscale[0]['penalite'];
+    const { amount, penalite, montantDu } = fiscale[0];
+    const {
+      puissanceMoteur,
+      chassis,
+      dateMiseEnCirculation,
+      dateImmatriculation,
+      immatricuation,
+      nombreDePlace,
+      poidsCharge,
+      poidsVide,
+      poidsUtile,
+    } = infoLiquidation['data']['object']['vehicule'];
+    const {
+      typevehicule,
+      dernieredate,
+      dateecheance,
+      periodevalidite,
+      agences,
+    } = cnsr;
     return {
       taxe,
+      puissanceMoteur,
+      chassis,
+      dateMiseEnCirculation,
+      dateImmatriculation,
+      immatricuation,
+      nombreDePlace,
+      poidsCharge,
+      poidsVide,
+      poidsUtile,
       amount,
       penalite,
       montantDu,
-      totalAmount,
+      fiscale,
+      typevehicule,
+      dernieredate,
+      dateecheance,
+      periodevalidite,
+      agences,
+      infoLiquidation,
     };
   }
 }
