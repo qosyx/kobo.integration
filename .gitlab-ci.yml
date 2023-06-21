@@ -3,3 +3,5 @@ deployment:
     - master
   script:
     - docker-compose -p pnsstat up --build -d
+  tags: 
+    - tvm
