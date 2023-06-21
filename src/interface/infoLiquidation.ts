@@ -10,13 +10,13 @@ export interface infoLiqu {
   poidsUtile: string;
 }
 
-function getUserData(): UserData {
-  // Simulation de récupération des données utilisateur
-  const userData: UserData = {
-    id: 1,
-    name: 'John Doe',
-    email: 'johndoe@example.com',
-  };
+// function getUserData(): UserData {
+//   // Simulation de récupération des données utilisateur
+//   const userData: UserData = {
+//     id: 1,
+//     name: 'John Doe',
+//     email: 'johndoe@example.com',
+//   };
 
-  return userData;
-}
+//   return userData;
+// }
