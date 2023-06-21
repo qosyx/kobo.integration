@@ -1,0 +1,5 @@
+deployment:
+  only:
+    - master
+  script:
+    - docker-compose -p pnsstat up --build -d

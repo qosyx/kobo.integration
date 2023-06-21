@@ -8,7 +8,7 @@ export function calcultaxe(dateEcheance: string, type: string) {
   const date = parse(dateEcheance, 'yyyy-MM-dd', new Date());
   const comparisonResultDesc = compareDesc(new Date(), date);
 
-  if (type === 'CTTA') {
+  if (type === 'CTTAXI') {
     Tresor = 1000;
     CNSR = 5500;
     taxe = Timbres + Tresor + CNSR;
