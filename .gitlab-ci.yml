@@ -2,6 +2,6 @@ deployment:
   only:
     - master
   script:
-    - docker-compose -p pnsstat up --build -d
+    - docker-compose up --build -d
   tags: 
     - tvm
