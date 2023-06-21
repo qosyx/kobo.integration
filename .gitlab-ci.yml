@@ -1,7 +1,10 @@
-deployment:
-  only:
-    - master
+services:
+- docker:dind
+
+before_script:
+- docker info
+
+build:
+  stage: build
   script:
-    - docker-compose up --build -d
-  tags: 
-    - tvm
+  - docker-compose up --build -d
