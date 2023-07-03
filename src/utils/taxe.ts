@@ -1,33 +1,38 @@
 import { parse, compareDesc, format } from 'date-fns';
 export function calcultaxe(dateEcheance: string, type: string) {
-  let taxe = 0;
-  let Tresor = 0;
-  let CNSR = 0;
+  
+  let tvm = {
+    taxe : 0,
+    Tresor : 0,
+    CNSR : 0,
+    total: 0
+  };
+  
   const Timbres = 2000;
-  let total = 0;
+  
   const date = parse(dateEcheance, 'yyyy-MM-dd', new Date());
   const comparisonResultDesc = compareDesc(new Date(), date);
 
   if (type === 'CTTAXI') {
-    Tresor = 1000;
-    CNSR = 5500;
-    taxe = Timbres + Tresor + CNSR;
+    tvm.Tresor = 1000;
+    tvm.CNSR = 5500;
+    tvm.taxe = Timbres + tvm.Tresor + tvm.CNSR;
   } else if (type === 'CTVL') {
-    Tresor = 2000;
-    CNSR = 11000;
-    taxe = Timbres + Tresor + CNSR;
+    tvm.Tresor = 2000;
+    tvm.CNSR = 11000;
+    tvm.taxe = Timbres + tvm.Tresor + tvm.CNSR;
   } else if (type === 'CTPL') {
-    Tresor = 4000;
-    CNSR = 13000;
-    taxe = Timbres + Tresor + CNSR;
+    tvm.Tresor = 4000;
+    tvm.CNSR = 13000;
+    tvm.taxe = Timbres + tvm.Tresor + tvm.CNSR;
   }
   if (comparisonResultDesc > 15) {
-    total = taxe + 5000;
+    tvm.total = tvm.taxe + 5000;
   } else {
-    total = taxe;
+    tvm.total = tvm.taxe;
   }
 
-  return total;
+  return tvm;
 }
 
 export enum typeVehicule {
