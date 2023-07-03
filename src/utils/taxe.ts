@@ -1,10 +1,10 @@
-import { parse, compareDesc, format } from 'date-fns';
+import { parse, compareDesc } from 'date-fns';
 export function calcultaxe(dateEcheance: string, type: string) {
   const tvm = {
     taxe: 0,
     tresor: 0,
     cnsr_taxe: 0,
-    penalite: 5000,
+    penalite: 0,
     total: 0,
   };
 
@@ -27,7 +27,8 @@ export function calcultaxe(dateEcheance: string, type: string) {
     tvm.taxe = Timbres + tvm.tresor + tvm.cnsr_taxe;
   }
   if (comparisonResultDesc > 15) {
-    tvm.total = tvm.taxe + tvm.penalite;
+    tvm.total = tvm.taxe + 5000;
+    tvm.penalite = 5000;
     tvm.total.toFixed();
   } else {
     tvm.total = tvm.taxe;
