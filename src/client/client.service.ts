@@ -32,7 +32,23 @@ const requestEtatVehicule: AxiosRequestConfig = {
 export class ClientService {
   private readonly logger = new Logger(ClientService.name);
   constructor(private readonly httpService: HttpService) {}
+  // CTVL pour
 
+  // CTPL pour Véhicule Poids Lourd
+
+  // CTTA pour Taxi.
+  typeVehicule(type: string): string {
+    switch (type) {
+      case 'CTVL':
+        return 'Véhicule Léger';
+      case 'CTPL':
+        return 'Véhicule Poids Lourd';
+      case 'CTTAXI':
+        return 'Taxi';
+    }
+
+    return;
+  }
   async getEtatVehicule(immatriculationNumber: string): Promise<any> {
     this.logger.log('cnsr etat statut');
     const { data } = await firstValueFrom(
@@ -156,9 +172,9 @@ export class ClientService {
     console.log(fiscale[0]);
 
     let { amount, penalite, montantDu } = fiscale[0];
-    amount = amount.toFixed(2);
-    penalite = penalite.toFixed(2);
-    montantDu = montantDu.toFixed(2);
+    amount = amount.toFixed(0);
+    penalite = penalite.toFixed(0);
+    montantDu = montantDu.toFixed(0);
     // infoLiqu = infoLiquidation['data']['object']['vehicule'];
     // console.log(infoLiqu);
 
@@ -180,8 +196,10 @@ export class ClientService {
       periodevalidite,
       agences,
     } = cnsr;
-    const taxe = calcultaxe(dateecheance, typevehicule).toFixed(2);
+    const taxe = calcultaxe(dateecheance, typevehicule).toFixed(0);
+    const libelleTypeVehicule = this.typeVehicule(typevehicule);
     return {
+      libelleTypeVehicule,
       taxe,
       puissanceMoteur,
       chassis,
