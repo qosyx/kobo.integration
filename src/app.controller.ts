@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Query, Req } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ClientService } from './client/client.service';
-import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CnsrObject, DgiObject, typeVehicule } from './utils/taxe';
 
 @Controller()

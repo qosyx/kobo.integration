@@ -62,33 +62,33 @@ export function getValidateDate(
 }
 
 export class CnsrObject {
-  @ApiProperty()
+  @ApiProperty({ default: 'CTPL' })
   typevehicule: string;
-  @ApiProperty()
+  @ApiProperty({ default: 'XX0120YY' })
   immatriculation: string;
-  @ApiProperty()
+  @ApiProperty({ default: '2023-06-20' })
   datevisite: string;
-  @ApiProperty()
+  @ApiProperty({ default: '2024-06-020' })
   datevalidite: string;
-  @ApiProperty()
+  @ApiProperty({ default: 'PARAKOU' })
   agences: string;
-  @ApiProperty()
+  @ApiProperty({ default: '100125541' })
   idsequence: string;
 }
 
 export class DgiObject {
-  @ApiProperty()
+  @ApiProperty({ default: 2021 })
   annee: string;
-  @ApiProperty()
+  @ApiProperty({ default: '2023-01-15T16:00:00.000Z' })
   datePaiement: Date;
-  @ApiProperty()
+  @ApiProperty({ default: 'BS7369RB' })
   immatriculation: string;
-  @ApiProperty()
+  @ApiProperty({ default: 30000 })
   montantDu: string;
-  @ApiProperty()
+  @ApiProperty({ default: 'AZERTY' })
   numeroQuittance: string;
-  @ApiProperty()
+  @ApiProperty({ default: 0 })
   penalite: string;
-  @ApiProperty()
+  @ApiProperty({ default: 'AUTRES' })
   typeVehicule: string;
 }
