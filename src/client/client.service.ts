@@ -202,7 +202,7 @@ export class ClientService {
       typevehicule,
     );
     const libelleTypeVehicule = this.typeVehicule(typevehicule);
-    const netPayer = total + amount;
+    const netPayer = total.toFixed() + parseInt(amount).toFixed();
     return {
       netPayer,
       libelleTypeVehicule,
