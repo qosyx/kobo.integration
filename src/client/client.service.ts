@@ -196,11 +196,20 @@ export class ClientService {
       periodevalidite,
       agences,
     } = cnsr;
-    const taxe = calcultaxe(dateecheance, typevehicule).toFixed(0);
+
+    const { taxe, tresor, cnsr_taxe, total } = calcultaxe(
+      dateecheance,
+      typevehicule,
+    );
     const libelleTypeVehicule = this.typeVehicule(typevehicule);
+    const netPayer = total + amount;
     return {
+      netPayer,
       libelleTypeVehicule,
       taxe,
+      tresor,
+      cnsr_taxe,
+      total,
       puissanceMoteur,
       chassis,
       dateMiseEnCirculation,
