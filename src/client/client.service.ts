@@ -8,7 +8,6 @@ import {
   CnsrObject,
   DgiObject,
 } from '../utils/taxe';
-import { infoLiqu } from '../interface/infoLiquidation';
 const requestConfig: AxiosRequestConfig = {
   headers: {
     'Uxp-Client': 'BJ/GOV/PNS/PRE-PROD-PORTAIL',

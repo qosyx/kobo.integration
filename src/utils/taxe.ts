@@ -53,11 +53,11 @@ export function getValidateDate(
 
   switch (typeVehicule) {
     case 'CTVL':
-      return addDays(date, 10).toISOString().split('T')[0];
+      return addDays(date, 182).toISOString().split('T')[0];
     case 'CTPL':
-      return addDays(date, 10).toISOString().split('T')[0];
+      return addDays(date, 364).toISOString().split('T')[0];
     case 'CTTAXI':
-      return addDays(date, 10).toISOString().split('T')[0];
+      return addDays(date, 179).toISOString().split('T')[0];
   }
 }
 
