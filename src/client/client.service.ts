@@ -197,7 +197,7 @@ export class ClientService {
       agences,
     } = cnsr;
 
-    const { taxe, tresor, cnsr_taxe, total } = calcultaxe(
+    const { taxe, tresor, cnsr_taxe, penalite_taxe, total } = calcultaxe(
       dateecheance,
       typevehicule,
     );
@@ -205,6 +205,7 @@ export class ClientService {
     const netPayer = total.toFixed() + parseInt(amount).toFixed();
     return {
       netPayer,
+      penalite_taxe,
       libelleTypeVehicule,
       taxe,
       tresor,

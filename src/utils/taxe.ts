@@ -4,7 +4,7 @@ export function calcultaxe(dateEcheance: string, type: string) {
     taxe: 0,
     tresor: 0,
     cnsr_taxe: 0,
-    penalite: 0,
+    penalite_taxe: 0,
     total: 0,
   };
 
@@ -28,7 +28,7 @@ export function calcultaxe(dateEcheance: string, type: string) {
   }
   if (comparisonResultDesc > 15) {
     tvm.total = tvm.taxe + 5000;
-    tvm.penalite = 5000;
+    tvm.penalite_taxe = 5000;
     tvm.total.toFixed();
   } else {
     tvm.total = tvm.taxe;
