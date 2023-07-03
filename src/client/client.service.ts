@@ -2,12 +2,18 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
 import { AxiosError, AxiosRequestConfig } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
-import { calcultaxe } from '../utils/taxe';
+import { calcultaxe, getValidateDate, CnsrObject } from '../utils/taxe';
 import { infoLiqu } from '../interface/infoLiquidation';
 const requestConfig: AxiosRequestConfig = {
   headers: {
     'Uxp-Client': 'BJ/GOV/PNS/PRE-PROD-PORTAIL',
-    'Uxp-Service': ' BJ/GOV/DGI/TVM/Statut_Paiement_TVM/v1',
+    'Uxp-Service': 'BJ/GOV/DGI/TVM/Statut_Paiement_TVM/v1',
+  },
+};
+const cnsrNotifyHeader: AxiosRequestConfig = {
+  headers: {
+    'Uxp-Client': 'BJ/GOV/PNS/PRE-PROD-PORTAIL',
+    'Uxp-Service': 'BJ/GOV/CNSR/SECUROUTE/addvoiture/v1',
   },
 };
 const requestConfig2: AxiosRequestConfig = {
@@ -46,8 +52,6 @@ export class ClientService {
       case 'CTTAXI':
         return 'Taxi';
     }
-
-    return;
   }
   async getEtatVehicule(immatriculationNumber: string): Promise<any> {
     this.logger.log('cnsr etat statut');
@@ -195,6 +199,7 @@ export class ClientService {
       dateecheance,
       periodevalidite,
       agences,
+      idsequence,
     } = cnsr;
 
     const { taxe, tresor, cnsr_taxe, penalite_taxe, total } = calcultaxe(
@@ -229,7 +234,40 @@ export class ClientService {
       dateecheance,
       periodevalidite,
       agences,
+      idsequence,
       infoLiquidation,
     };
+  }
+
+  async notifyerCnsr(cnsrObject: CnsrObject): Promise<any> {
+    const dateVisite = new Date().toISOString().split('T')[0];
+    cnsrObject.datevalidite = getValidateDate(
+      dateVisite,
+      cnsrObject.typevehicule,
+    );
+    console.log(`dateVisite ${dateVisite}`);
+
+    const ArraycnsrObject = [];
+    ArraycnsrObject.push(cnsrObject);
+    const { data } = await firstValueFrom(
+      this.httpService
+        .post<any>(
+          `http://pns-ss01.xroad.bj:8081/restapi`,
+          ArraycnsrObject,
+          cnsrNotifyHeader,
+        )
+        .pipe(
+          catchError((error: AxiosError) => {
+            this.logger.error(error.response.data);
+            throw 'An error happened!';
+          }),
+        ),
+    );
+    if (data.message === 2) {
+      return 'Frais de visite technique déjà payé';
+    }
+    if (data.message === true) {
+      return 'Data save';
+    }
   }
 }

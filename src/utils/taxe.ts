@@ -1,4 +1,6 @@
-import { parse, compareDesc } from 'date-fns';
+import { parse, compareDesc, addDays } from 'date-fns';
+import { ApiProperty } from '@nestjs/swagger';
+
 export function calcultaxe(dateEcheance: string, type: string) {
   const tvm = {
     taxe: 0,
@@ -41,4 +43,35 @@ export function calcultaxe(dateEcheance: string, type: string) {
 export enum typeVehicule {
   Autre = 'AUTRE',
   TRICYCLE = 'TRICYCLE',
+}
+
+export function getValidateDate(
+  typeVehicule: string,
+  lastDate: string,
+): string {
+  const date = parse(lastDate, 'yyyy-MM-dd', new Date());
+
+  switch (typeVehicule) {
+    case 'CTVL':
+      return addDays(date, 10).toISOString().split('T')[0];
+    case 'CTPL':
+      return addDays(date, 10).toISOString().split('T')[0];
+    case 'CTTAXI':
+      return addDays(date, 10).toISOString().split('T')[0];
+  }
+}
+
+export class CnsrObject {
+  @ApiProperty()
+  typevehicule: string;
+  @ApiProperty()
+  immatriculation: string;
+  @ApiProperty()
+  datevisite: string;
+  @ApiProperty()
+  datevalidite: string;
+  @ApiProperty()
+  agences: string;
+  @ApiProperty()
+  idsequence: string;
 }
