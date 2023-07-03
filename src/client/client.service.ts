@@ -2,7 +2,12 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
 import { AxiosError, AxiosRequestConfig } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
-import { calcultaxe, getValidateDate, CnsrObject } from '../utils/taxe';
+import {
+  calcultaxe,
+  getValidateDate,
+  CnsrObject,
+  DgiObject,
+} from '../utils/taxe';
 import { infoLiqu } from '../interface/infoLiquidation';
 const requestConfig: AxiosRequestConfig = {
   headers: {
@@ -10,6 +15,15 @@ const requestConfig: AxiosRequestConfig = {
     'Uxp-Service': 'BJ/GOV/DGI/TVM/Statut_Paiement_TVM/v1',
   },
 };
+const dgiNotifyHeader: AxiosRequestConfig = {
+  headers: {
+    // 'Uxp-Client': 'BJ/GOV/PNS/PRE-PROD-PORTAIL',
+    // 'Uxp-Service': 'BJ/GOV/DGI/TVM/Statut_Paiement_TVM/v1',
+    Authorization:
+      'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNjExNyIsImlhdCI6MTY3Mzk2NzQ1MiwiZXhwIjoxNzQ2NTQzNDUyfQ.fzb5xBFJaFnwirt3eTme659NUtcd8U0ZTh6a3gOO2rHrVF8nzrBEq4865juZDVbbcS6xkgF5Qc0-B5FgxxpNww',
+  },
+};
+
 const cnsrNotifyHeader: AxiosRequestConfig = {
   headers: {
     'Uxp-Client': 'BJ/GOV/PNS/PRE-PROD-PORTAIL',
@@ -175,10 +189,12 @@ export class ClientService {
     const cnsr = await this.getEtatVehicule(immatriculationNumber);
     console.log(fiscale[0]);
 
+    // eslint-disable-next-line prefer-const
     let { amount, penalite, montantDu } = fiscale[0];
     amount = amount.toFixed(0);
     penalite = penalite.toFixed(0);
     montantDu = montantDu.toFixed(0);
+    const year_tvm = fiscale[0]['year'];
     // infoLiqu = infoLiquidation['data']['object']['vehicule'];
     // console.log(infoLiqu);
 
@@ -209,6 +225,7 @@ export class ClientService {
     const libelleTypeVehicule = this.typeVehicule(typevehicule);
     const netPayer = (total + parseInt(amount)).toFixed();
     return {
+      year_tvm,
       netPayer,
       penalite_taxe,
       libelleTypeVehicule,
@@ -269,5 +286,26 @@ export class ClientService {
     if (data.message === true) {
       return 'Data save';
     }
+  }
+
+  async notifyerDgi(dgiObject: DgiObject): Promise<any> {
+    dgiObject.datePaiement = new Date();
+    const { data } = await firstValueFrom(
+      this.httpService
+        .post<any>(
+          `https://developper.impots.bj/tvm/api/paiement/e-visite-notification`,
+          dgiObject,
+          dgiNotifyHeader,
+        )
+        .pipe(
+          catchError((error: AxiosError) => {
+            this.logger.error(error);
+            throw 'An error happened!';
+          }),
+        ),
+    );
+    console.log(data);
+
+    return data;
   }
 }

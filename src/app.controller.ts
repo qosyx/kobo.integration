@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Query, Req } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ClientService } from './client/client.service';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
-import { CnsrObject, typeVehicule } from './utils/taxe';
+import { CnsrObject, DgiObject, typeVehicule } from './utils/taxe';
 
 @Controller()
 @ApiTags('TVM')
@@ -62,9 +62,16 @@ export class AppController {
   }
 
   @Post('/cnsrNotify')
-  async myDate(@Body() cnsrObject: CnsrObject) {
+  async cnsrNotify(@Body() cnsrObject: CnsrObject) {
     console.log(new Date());
 
     return this.clientService.notifyerCnsr(cnsrObject);
+  }
+
+  @Post('/dgiNotify')
+  async dgiNotify(@Body() dgiObject: DgiObject) {
+    console.log(new Date());
+
+    return this.clientService.notifyerDgi(dgiObject);
   }
 }

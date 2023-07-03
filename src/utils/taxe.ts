@@ -75,3 +75,20 @@ export class CnsrObject {
   @ApiProperty()
   idsequence: string;
 }
+
+export class DgiObject {
+  @ApiProperty()
+  annee: string;
+  @ApiProperty()
+  datePaiement: Date;
+  @ApiProperty()
+  immatriculation: string;
+  @ApiProperty()
+  montantDu: string;
+  @ApiProperty()
+  numeroQuittance: string;
+  @ApiProperty()
+  penalite: string;
+  @ApiProperty()
+  typeVehicule: string;
+}
