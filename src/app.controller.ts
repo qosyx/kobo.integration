@@ -63,7 +63,7 @@ export class AppController {
 
   @Post('/cnsrNotify')
   async cnsrNotify(@Body() cnsrObject: CnsrObject) {
-    console.log(new Date());
+    console.log(`controller: ${cnsrObject}`);
 
     return this.clientService.notifyerCnsr(cnsrObject);
   }
