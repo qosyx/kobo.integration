@@ -63,7 +63,9 @@ export class AppController {
 
   @Post('/cnsrNotify')
   async cnsrNotify(@Body() cnsrObject: CnsrObject) {
-    console.log(`controller: ${cnsrObject}`);
+    console.log(
+      `controller: ${cnsrObject.typevehicule} ${cnsrObject.immatriculation} ${cnsrObject.agences}`,
+    );
 
     return this.clientService.notifyerCnsr(cnsrObject);
   }
