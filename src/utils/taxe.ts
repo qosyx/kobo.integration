@@ -48,7 +48,7 @@ export enum typeVehicule {
 export function getValidateDate(typeVehicule: string, lastDate: string) {
   const date = parse(lastDate, 'yyyy-MM-dd', new Date());
   let response = '';
-  console.log(`getValidateDate date ${lastDate}`);
+  console.log(`the date getValidateDate date ${lastDate}`);
   switch (typeVehicule) {
     case 'CTVL':
       response = addDays(date, 182).toISOString().split('T')[0];
