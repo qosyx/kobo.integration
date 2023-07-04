@@ -261,11 +261,14 @@ export class ClientService {
       dateVisite,
       cnsrObject.typevehicule,
     );
+    console.log(
+      `ArraycnsrObject ${cnsrObject.datevalidite} eee ${cnsrObject.datevalidite}`,
+    );
     console.log(`dateVisite ${dateVisite}`);
-   
+
     const ArraycnsrObject = [];
     ArraycnsrObject.push(cnsrObject);
-    console.log(`ArraycnsrObject ${cnsrObject}`);
+
     const { data } = await firstValueFrom(
       this.httpService
         .post<any>(
