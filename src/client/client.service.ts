@@ -279,12 +279,7 @@ export class ClientService {
           }),
         ),
     );
-    if (data.message === 2) {
-      return 'Frais de visite technique déjà payé';
-    }
-    if (data.message === true) {
-      return 'Data save';
-    }
+    return data;
   }
 
   async notifyerDgi(dgiObject: DgiObject): Promise<any> {
