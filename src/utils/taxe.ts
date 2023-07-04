@@ -45,20 +45,20 @@ export enum typeVehicule {
   TRICYCLE = 'TRICYCLE',
 }
 
-export function getValidateDate(
-  typeVehicule: string,
-  lastDate: string,
-): string {
+export function getValidateDate(typeVehicule: string, lastDate: string) {
   const date = parse(lastDate, 'yyyy-MM-dd', new Date());
-
+  let response = '';
   switch (typeVehicule) {
     case 'CTVL':
-      return addDays(date, 182).toISOString().split('T')[0];
+      response = addDays(date, 182).toISOString().split('T')[0];
     case 'CTPL':
-      return addDays(date, 364).toISOString().split('T')[0];
+      response = addDays(date, 364).toISOString().split('T')[0];
     case 'CTTAXI':
-      return addDays(date, 179).toISOString().split('T')[0];
+      response = addDays(date, 179).toISOString().split('T')[0];
   }
+  console.log(`getValidateDate ${response}`);
+
+  return response;
 }
 
 export class CnsrObject {
