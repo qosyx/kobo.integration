@@ -258,8 +258,8 @@ export class ClientService {
   async notifyerCnsr(cnsrObject: CnsrObject): Promise<any> {
     const dateVisite = new Date().toISOString().split('T')[0];
     cnsrObject.datevalidite = getValidateDate(
-      dateVisite,
       cnsrObject.typevehicule,
+      dateVisite,
     );
     console.log(
       `ArraycnsrObject ${cnsrObject.datevalidite} eee ${cnsrObject.datevalidite}`,
