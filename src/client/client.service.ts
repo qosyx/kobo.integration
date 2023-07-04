@@ -265,7 +265,7 @@ export class ClientService {
    
     const ArraycnsrObject = [];
     ArraycnsrObject.push(cnsrObject);
-    console.log(`ArraycnsrObject ${ArraycnsrObject}`);
+    console.log(`ArraycnsrObject ${cnsrObject}`);
     const { data } = await firstValueFrom(
       this.httpService
         .post<any>(
