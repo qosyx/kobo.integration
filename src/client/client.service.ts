@@ -256,15 +256,15 @@ export class ClientService {
   }
 
   async notifyerCnsr(cnsrObject: CnsrObject): Promise<any> {
-    const dateVisite = new Date().toISOString().split('T')[0];
+    const datevisite = new Date().toISOString().split('T')[0];
     cnsrObject.datevalidite = getValidateDate(
       cnsrObject.typevehicule,
-      dateVisite,
+      datevisite,
     );
     console.log(
       `ArraycnsrObject ${cnsrObject.datevalidite} eee ${cnsrObject.datevalidite}`,
     );
-    console.log(`dateVisite ${dateVisite}`);
+    console.log(`datevisite ${datevisite}`);
 
     const ArraycnsrObject = [];
     ArraycnsrObject.push(cnsrObject);
