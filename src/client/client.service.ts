@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { AxiosError, AxiosRequestConfig } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
 import {
@@ -118,7 +118,16 @@ export class ClientService {
           catchError((error: AxiosError) => {
             console.log(error.response.status);
             this.logger.error(error.response.data);
-            throw 'An error happened!';
+            throw new HttpException(
+              {
+                status: HttpStatus.BAD_REQUEST,
+                error: error.response.statusText,
+              },
+              HttpStatus.BAD_REQUEST,
+              {
+                cause: error,
+              },
+            );
           }),
         ),
     );
