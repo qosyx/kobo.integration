@@ -283,6 +283,8 @@ export class ClientService {
           }),
         ),
     );
+    console.log(`data ${data}`);
+
     return data;
   }
 
