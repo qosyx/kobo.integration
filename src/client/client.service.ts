@@ -126,7 +126,7 @@ export class ClientService {
             console.log('erreur', error.response.status);
 
             switch (error.response.status) {
-              case 400:
+              case 404:
                 throw new BadRequestException(error.response.statusText, {
                   cause: new Error(),
                   description: `${error.response.data}`,
