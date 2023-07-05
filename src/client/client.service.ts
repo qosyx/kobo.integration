@@ -62,7 +62,7 @@ export class ClientService {
   // CTPL pour Véhicule Poids Lourd
 
   handleError(error: AxiosError, request: string): Observable<any> {
-    console.log(`erreur ${new Date()} ${request} ${error.response}`);
+    console.log(`erreur ${new Date()} ${request} ${error.response.statusText}`);
     switch (error.response.status) {
       case 404:
         throw new NotFoundException(error.response.status, {
