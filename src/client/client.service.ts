@@ -1,7 +1,14 @@
 import { HttpService } from '@nestjs/axios';
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { AxiosError, AxiosRequestConfig } from 'axios';
-import { catchError, firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom, of } from 'rxjs';
 import {
   calcultaxe,
   getValidateDate,
@@ -116,18 +123,23 @@ export class ClientService {
         )
         .pipe(
           catchError((error: AxiosError) => {
-            console.log(error.response.status);
-            this.logger.error(error.response.data);
-            throw new HttpException(
-              {
-                status: HttpStatus.BAD_REQUEST,
-                error: error.response.statusText,
-              },
-              HttpStatus.BAD_REQUEST,
-              {
-                cause: error,
-              },
-            );
+            switch (error.response.status) {
+              case 400:
+                throw new BadRequestException(error.response.statusText, {
+                  cause: new Error(),
+                  description: 'Immatriculation not found',
+                });
+              case 500:
+                throw new InternalServerErrorException(
+                  error.response.statusText,
+                  {
+                    cause: new Error(),
+                    description: 'Immatriculation not found',
+                  },
+                );
+              default:
+                throw `une erreur${error.response.statusText}`;
+            }
           }),
         ),
     );
