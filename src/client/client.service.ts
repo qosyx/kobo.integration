@@ -283,7 +283,7 @@ export class ClientService {
           }),
         ),
     );
-    console.log(`data ${data}`);
+    console.log(`data ${data.message}`);
 
     return data;
   }
