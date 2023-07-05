@@ -113,7 +113,7 @@ export class ClientService {
         ),
     );
     const date = parse(data[0].dateecheance, 'yyyy-MM-dd', new Date());
-    const comparisonResultDesc = differenceInDays(new Date(), date);
+    const comparisonResultDesc = differenceInDays(date, new Date());
     console.log(
       `comparisonResultDesc: ${comparisonResultDesc}  ${date}  ${new Date()}`,
     );
