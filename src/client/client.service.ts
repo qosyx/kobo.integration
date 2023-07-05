@@ -123,6 +123,8 @@ export class ClientService {
         )
         .pipe(
           catchError((error: AxiosError) => {
+            console.log('erreur', error.response.status);
+
             switch (error.response.status) {
               case 400:
                 throw new BadRequestException(error.response.statusText, {
