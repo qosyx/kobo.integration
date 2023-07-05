@@ -284,9 +284,15 @@ export class ClientService {
         )
         .pipe(catchError((error: AxiosError) => this.handleError(error))),
     );
-    console.log(`data ${data.message}`);
 
-    return data;
+    const response = {
+      cnsr: data,
+      datevisite: cnsrObject.datevisite,
+      datevalidite: cnsrObject.datevalidite,
+      typevehicule: cnsrObject.typevehicule,
+    };
+    console.log(`data ${data.message} ${response}`);
+    return response;
   }
 
   async notifyerDgi(dgiObject: DgiObject): Promise<any> {
