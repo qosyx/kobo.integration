@@ -76,4 +76,12 @@ export class AppController {
 
     return this.clientService.notifyerDgi(dgiObject);
   }
+
+  @Get('/cnsrEtatVehicule')
+  @ApiQuery({ name: 'immatriculatioNumber', type: String })
+  async getEtatVehicule(@Query() query) {
+    console.log(query);
+    const { immatriculatioNumber } = query;
+    return this.clientService.getEtatVehicule(immatriculatioNumber);
+  }
 }
