@@ -76,7 +76,7 @@ export class ClientService {
         )
         .pipe(
           catchError((error: AxiosError) => {
-            console.log(error);
+            console.log(error.response.status);
             this.logger.error(error.response.data);
             throw 'An error happened!';
           }),
