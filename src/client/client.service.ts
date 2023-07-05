@@ -140,7 +140,10 @@ export class ClientService {
                   },
                 );
               default:
-                throw `une erreur ${error.response.statusText}`;
+                throw new HttpException(
+                  error.response.data,
+                  error.response.status,
+                );
             }
           }),
         ),
