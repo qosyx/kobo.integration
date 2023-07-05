@@ -141,7 +141,7 @@ export class ClientService {
         )
         .pipe(
           catchError((error: AxiosError) => {
-            this.logger.error(error.response.data);
+            console.log(error);
             throw error.response.data;
           }),
         ),
