@@ -127,18 +127,18 @@ export class ClientService {
               case 400:
                 throw new BadRequestException(error.response.statusText, {
                   cause: new Error(),
-                  description: 'Immatriculation not found',
+                  description: `${error.response.data}`,
                 });
               case 500:
                 throw new InternalServerErrorException(
                   error.response.statusText,
                   {
                     cause: new Error(),
-                    description: 'Immatriculation not found',
+                    description: `${error.response.data}`,
                   },
                 );
               default:
-                throw `une erreur${error.response.statusText}`;
+                throw `une erreur ${error.response.statusText}`;
             }
           }),
         ),
