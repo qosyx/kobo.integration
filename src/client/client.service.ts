@@ -128,14 +128,14 @@ export class ClientService {
             switch (error.response.status) {
               case 404:
                 throw new BadRequestException(error.response.statusText, {
-                  cause: new Error(),
+                  cause: new Error(`${error.response.data}`),
                   description: `${error.response.data}`,
                 });
               case 500:
                 throw new InternalServerErrorException(
                   error.response.statusText,
                   {
-                    cause: new Error(),
+                    cause: new Error(`${error.response.data}`),
                     description: `${error.response.data}`,
                   },
                 );
