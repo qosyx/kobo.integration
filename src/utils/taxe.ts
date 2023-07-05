@@ -1,4 +1,4 @@
-import { parse, compareDesc, addDays } from 'date-fns';
+import { parse, compareDesc, addDays, differenceInDays } from 'date-fns';
 import { ApiProperty } from '@nestjs/swagger';
 
 export function calcultaxe(dateEcheance: string, type: string) {
@@ -13,7 +13,7 @@ export function calcultaxe(dateEcheance: string, type: string) {
   const Timbres = 2000;
 
   const date = parse(dateEcheance, 'yyyy-MM-dd', new Date());
-  const comparisonResultDesc = compareDesc(new Date(), date);
+  const comparisonResultDesc = differenceInDays(new Date(), date);
 
   if (type === 'CTTAXI') {
     tvm.tresor = 1000;

@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { parse, compareDesc, addDays } from 'date-fns';
+import { parse, compareDesc, addDays, differenceInDays } from 'date-fns';
 import {
   HttpException,
   Injectable,
@@ -113,7 +113,7 @@ export class ClientService {
         ),
     );
     const date = parse(data[0].dateecheance, 'yyyy-MM-dd', new Date());
-    const comparisonResultDesc = compareDesc(new Date(), date);
+    const comparisonResultDesc = differenceInDays(new Date(), date);
     console.log(
       `comparisonResultDesc: ${comparisonResultDesc}  ${date}  ${new Date()}`,
     );
