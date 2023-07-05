@@ -1,15 +1,13 @@
 import { HttpService } from '@nestjs/axios';
 import {
-  BadRequestException,
   HttpException,
-  HttpStatus,
   Injectable,
   InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { AxiosError, AxiosRequestConfig } from 'axios';
-import { catchError, firstValueFrom, of } from 'rxjs';
+import { Observable, catchError, firstValueFrom, of } from 'rxjs';
 import {
   calcultaxe,
   getValidateDate,
@@ -63,6 +61,25 @@ export class ClientService {
 
   // CTPL pour Véhicule Poids Lourd
 
+  handleError(error: AxiosError): Observable<any> {
+    switch (error.response.status) {
+      case 404:
+        throw new NotFoundException(error.response.status, {
+          cause: new Error(),
+          description: error.response.statusText,
+        });
+      case 500:
+        throw new InternalServerErrorException(error.response.statusText, {
+          cause: new Error(),
+          description: error.response.statusText,
+        });
+      default:
+        throw new HttpException(
+          error.response.statusText,
+          error.response.status,
+        );
+    }
+  }
   // CTTA pour Taxi.
   typeVehicule(type: string): string {
     switch (type) {
@@ -122,32 +139,7 @@ export class ClientService {
           `http://pns-ss01.xroad.bj:8081/restapi/${immatriculationNumber}`,
           requestConfig2,
         )
-        .pipe(
-          catchError((error: AxiosError) => {
-            console.log('erreur', error.response.status);
-
-            switch (error.response.status) {
-              case 404:
-                throw new NotFoundException(error.response.status, {
-                  cause: new Error(),
-                  description: error.response.statusText,
-                });
-              case 500:
-                throw new InternalServerErrorException(
-                  error.response.statusText,
-                  {
-                    cause: new Error(),
-                    description: error.response.statusText,
-                  },
-                );
-              default:
-                throw new HttpException(
-                  error.response.statusText,
-                  error.response.status,
-                );
-            }
-          }),
-        ),
+        .pipe(catchError((error: AxiosError) => this.handleError(error))),
     );
     // console.log(Object.values(data).filter((res) => res != 'notPaid'));
     const notPaid: Array<string> = [];
