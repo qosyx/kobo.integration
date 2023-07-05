@@ -6,6 +6,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { AxiosError, AxiosRequestConfig } from 'axios';
 import { catchError, firstValueFrom, of } from 'rxjs';
@@ -127,7 +128,7 @@ export class ClientService {
 
             switch (error.response.status) {
               case 404:
-                throw new BadRequestException(error.response.status, {
+                throw new NotFoundException(error.response.status, {
                   cause: new Error(),
                   description: error.response.statusText,
                 });
