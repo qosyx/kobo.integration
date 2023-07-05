@@ -114,6 +114,8 @@ export class ClientService {
     );
     const date = parse(data[0].dateecheance, 'yyyy-MM-dd', new Date());
     const comparisonResultDesc = compareDesc(new Date(), date);
+    console.log(comparisonResultDesc);
+
     if (comparisonResultDesc >= 60) {
       throw new UnauthorizedException('Vous avez encore 2 mois');
     }
