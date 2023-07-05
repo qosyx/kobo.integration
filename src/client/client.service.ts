@@ -1,10 +1,12 @@
 import { HttpService } from '@nestjs/axios';
+import { parse, compareDesc, addDays } from 'date-fns';
 import {
   HttpException,
   Injectable,
   InternalServerErrorException,
   Logger,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AxiosError, AxiosRequestConfig } from 'axios';
 import { Observable, catchError, firstValueFrom, of } from 'rxjs';
@@ -110,7 +112,11 @@ export class ClientService {
           ),
         ),
     );
-    console.log('dddddddddddddddddd', data[0]);
+    const date = parse(data[0].dateecheance, 'yyyy-MM-dd', new Date());
+    const comparisonResultDesc = compareDesc(new Date(), date);
+    if (comparisonResultDesc >= 60) {
+      throw new UnauthorizedException('Vous avez encore 2 mois');
+    }
     return data[0];
   }
 
