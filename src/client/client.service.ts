@@ -62,6 +62,7 @@ export class ClientService {
   // CTPL pour Véhicule Poids Lourd
 
   handleError(error: AxiosError): Observable<any> {
+    console.log(error);
     switch (error.response.status) {
       case 404:
         throw new NotFoundException(error.response.status, {
@@ -99,13 +100,7 @@ export class ClientService {
           `http://pns-ss01.xroad.bj:8081/restapi/${immatriculationNumber}`,
           requestEtatVehicule,
         )
-        .pipe(
-          catchError((error: AxiosError) => {
-            console.log(error.response.status);
-            this.logger.error(error.response.data);
-            throw 'An error happened!';
-          }),
-        ),
+        .pipe(catchError((error: AxiosError) => this.handleError(error))),
     );
     console.log('dddddddddddddddddd', data[0]);
     return data[0];
@@ -122,13 +117,7 @@ export class ClientService {
           `http://pns-ss01.xroad.bj:8081/restapi/${immatriculationNumber}/${year}`,
           requestConfig,
         )
-        .pipe(
-          catchError((error: AxiosError) => {
-            console.log(error);
-            this.logger.error(error.response.data);
-            throw 'An error happened!';
-          }),
-        ),
+        .pipe(catchError((error: AxiosError) => this.handleError(error))),
     );
     return data.object;
   }
@@ -161,12 +150,7 @@ export class ClientService {
           `http://pns-ss01.xroad.bj:8081/restapi/${immatriculationNumber}/${marque}/${year}`,
           requestConfig3,
         )
-        .pipe(
-          catchError((error: AxiosError) => {
-            console.log(error);
-            throw error.response.data;
-          }),
-        ),
+        .pipe(catchError((error: AxiosError) => this.handleError(error))),
     );
     return {
       data: data,
@@ -298,12 +282,7 @@ export class ClientService {
           ArraycnsrObject,
           cnsrNotifyHeader,
         )
-        .pipe(
-          catchError((error: AxiosError) => {
-            this.logger.error(error.response.data);
-            throw 'An error happened!';
-          }),
-        ),
+        .pipe(catchError((error: AxiosError) => this.handleError(error))),
     );
     console.log(`data ${data.message}`);
 
@@ -319,12 +298,7 @@ export class ClientService {
           dgiObject,
           dgiNotifyHeader,
         )
-        .pipe(
-          catchError((error: AxiosError) => {
-            this.logger.error(error);
-            throw 'An error happened!';
-          }),
-        ),
+        .pipe(catchError((error: AxiosError) => this.handleError(error))),
     );
     console.log(data);
 
