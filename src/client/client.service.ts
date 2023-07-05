@@ -76,6 +76,7 @@ export class ClientService {
         )
         .pipe(
           catchError((error: AxiosError) => {
+            console.log(error);
             this.logger.error(error.response.data);
             throw 'An error happened!';
           }),
@@ -98,6 +99,7 @@ export class ClientService {
         )
         .pipe(
           catchError((error: AxiosError) => {
+            console.log(error);
             this.logger.error(error.response.data);
             throw 'An error happened!';
           }),
@@ -114,6 +116,7 @@ export class ClientService {
         )
         .pipe(
           catchError((error: AxiosError) => {
+            console.log(error);
             this.logger.error(error.response.data);
             throw 'An error happened!';
           }),
