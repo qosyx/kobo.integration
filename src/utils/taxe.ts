@@ -28,7 +28,7 @@ export function calcultaxe(dateEcheance: string, type: string) {
     tvm.cnsr_taxe = 13000;
     tvm.taxe = Timbres + tvm.tresor + tvm.cnsr_taxe;
   }
-  if (comparisonResultDesc > 15) {
+  if (comparisonResultDesc < 15) {
     tvm.total = tvm.taxe + 5000;
     tvm.penalite_taxe = 5000;
     tvm.total.toFixed();
