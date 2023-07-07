@@ -118,9 +118,9 @@ export class ClientService {
       `comparisonResultDesc: ${comparisonResultDesc}  ${date}  ${new Date()}`,
     );
 
-    if (comparisonResultDesc >= 60) {
-      throw new UnauthorizedException('Vous avez encore 2 mois');
-    }
+    // if (comparisonResultDesc >= 60) {
+    //   throw new UnauthorizedException('Vous avez encore 2 mois');
+    // }
     return data[0];
   }
 

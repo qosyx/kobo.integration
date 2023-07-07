@@ -13,7 +13,7 @@ export function calcultaxe(dateEcheance: string, type: string) {
   const Timbres = 2000;
 
   const date = parse(dateEcheance, 'yyyy-MM-dd', new Date());
-  const comparisonResultDesc = differenceInDays(new Date(), date);
+  const comparisonResultDesc = differenceInDays(date, new Date());
 
   if (type === 'CTTAXI') {
     tvm.tresor = 1000;
