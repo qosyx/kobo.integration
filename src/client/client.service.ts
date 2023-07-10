@@ -139,12 +139,21 @@ export class ClientService {
     );
     const isEmpty = Object.entries(data).length === 0;
     if (isEmpty) {
-      message = {
-        error: '404',
-        cause: 'not found',
+      const response = {
+        agences: '',
+        typevehicule: '',
+        immatriculation: '',
+        dernieredate: '',
+        dateecheance: '',
+        periodevalidite: '',
+        idsequence: '',
+        message: {
+          error: '404',
+          cause: 'not found',
+        },
       };
-      data.message = message;
-      return data;
+
+      return response;
     } else {
       const date = parse(data[0].dateecheance, 'yyyy-MM-dd', new Date());
       const comparisonResultDesc = differenceInDays(date, new Date());
