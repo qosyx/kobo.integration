@@ -87,6 +87,7 @@ export class ClientService {
         );
     }
   }
+
   // CTTA pour Taxi.
   typeVehicule(type: string): string {
     switch (type) {
@@ -100,6 +101,7 @@ export class ClientService {
   }
   async getEtatVehicule(immatriculationNumber: string): Promise<any> {
     this.logger.log('cnsr etat statut');
+    let message;
     const { data } = await firstValueFrom(
       this.httpService
         .get<any>(
@@ -107,9 +109,32 @@ export class ClientService {
           requestEtatVehicule,
         )
         .pipe(
-          catchError((error: AxiosError) =>
-            this.handleError(error, immatriculationNumber),
-          ),
+          catchError((error: AxiosError) => {
+            switch (error.response.status) {
+              case 404:
+                // throw new NotFoundException(error.response.status, {
+                //   cause: new Error(),
+                //   description: error.response.statusText,
+                // });
+                message = {
+                  error: error.response.status,
+                  cause: 'cnsr not found',
+                };
+              case 500:
+                throw new InternalServerErrorException(
+                  error.response.statusText,
+                  {
+                    cause: new Error(),
+                    description: error.response.statusText,
+                  },
+                );
+              default:
+                throw new HttpException(
+                  error.response.statusText,
+                  error.response.status,
+                );
+            }
+          }),
         ),
     );
     const date = parse(data[0].dateecheance, 'yyyy-MM-dd', new Date());
@@ -118,9 +143,6 @@ export class ClientService {
       `comparisonResultDesc: ${comparisonResultDesc}  ${date}  ${new Date()}`,
     );
 
-    // if (comparisonResultDesc >= 60) {
-    //   throw new UnauthorizedException('Vous avez encore 2 mois');
-    // }
     return data[0];
   }
 
