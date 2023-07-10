@@ -137,17 +137,27 @@ export class ClientService {
           }),
         ),
     );
-    const date = parse(data[0].dateecheance, 'yyyy-MM-dd', new Date());
-    const comparisonResultDesc = differenceInDays(date, new Date());
-    console.log(
-      `comparisonResultDesc: ${comparisonResultDesc}  ${date}  ${new Date()}`,
-    );
-    message = {
-      error: 'no error',
-      cause: 'all is good',
-    };
-    data[0].message = message;
-    return data[0];
+    const isEmpty = Object.entries(data).length === 0;
+    if (isEmpty) {
+      message = {
+        error: 'no error',
+        cause: 'all is good',
+      };
+      data.message = message;
+      return data;
+    } else {
+      const date = parse(data[0].dateecheance, 'yyyy-MM-dd', new Date());
+      const comparisonResultDesc = differenceInDays(date, new Date());
+      console.log(
+        `comparisonResultDesc: ${comparisonResultDesc}  ${date}  ${new Date()}`,
+      );
+      message = {
+        error: 'no error',
+        cause: 'all is good',
+      };
+      data[0].message = message;
+      return data[0];
+    }
   }
 
   async getPaiementStatut(
