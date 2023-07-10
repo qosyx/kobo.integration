@@ -140,8 +140,8 @@ export class ClientService {
     const isEmpty = Object.entries(data).length === 0;
     if (isEmpty) {
       message = {
-        error: 'no error',
-        cause: 'all is good',
+        error: '404',
+        cause: 'not found',
       };
       data.message = message;
       return data;
