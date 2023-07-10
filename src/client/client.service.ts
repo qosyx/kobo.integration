@@ -142,7 +142,11 @@ export class ClientService {
     console.log(
       `comparisonResultDesc: ${comparisonResultDesc}  ${date}  ${new Date()}`,
     );
-
+    message = {
+      error: 'no error',
+      cause: 'all is good',
+    };
+    data[0].message = message;
     return data[0];
   }
 
