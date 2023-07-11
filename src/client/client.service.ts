@@ -161,7 +161,7 @@ export class ClientService {
         `comparisonResultDesc: ${comparisonResultDesc}  ${date}  ${new Date()}`,
       );
       message = {
-        error: 'no error',
+        error: '200',
         cause: 'all is good',
       };
       data[0].message = message;
