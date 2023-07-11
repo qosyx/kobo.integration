@@ -395,4 +395,102 @@ export class ClientService {
 
     return data;
   }
+
+  async getAllTvmAmountWithoutCnsrApi(
+    immatriculationNumber: string,
+    marque: string,
+    typevehicule: string,
+  ) {
+    let year = await this.getStatOfPay(immatriculationNumber);
+    year = year.sort((a, b) => b - a);
+    console.log(year);
+    const fiscale: Array<any> = [];
+    let infoLiquidation: any;
+    for (let i = 0; i < year.length; i++) {
+      try {
+        const r = await this.liquidation(
+          immatriculationNumber,
+          marque,
+          year[i],
+        );
+        const data = {
+          amount: r['totalDu'],
+          penalite: r['penalite'],
+          montantDu: r['montantDu'],
+          year: year[i],
+        };
+        console.log(data);
+
+        fiscale.push(data);
+        infoLiquidation = r;
+      } catch (error) {
+        console.log(error.message);
+      }
+
+      // this.liquidation(immatriculationNumber, marque, year[i]);
+    }
+    console.log(infoLiquidation.data.object.vehicule.poidsCharge);
+
+    const cnsr = await this.getEtatVehicule(immatriculationNumber);
+    console.log(fiscale[0]);
+
+    // eslint-disable-next-line prefer-const
+    let { amount, penalite, montantDu } = fiscale[0];
+    amount = amount.toFixed(0);
+    penalite = penalite.toFixed(0);
+    montantDu = montantDu.toFixed(0);
+    const year_tvm = fiscale[0]['year'];
+    // infoLiqu = infoLiquidation['data']['object']['vehicule'];
+    // console.log(infoLiqu);
+
+    const {
+      puissanceMoteur,
+      chassis,
+      dateMiseEnCirculation,
+      dateImmatriculation,
+      immatricuation,
+      nombreDePlace,
+      poidsCharge,
+      poidsVide,
+      poidsUtile,
+    } = infoLiquidation['data']['object']['vehicule'];
+    const { dernieredate, periodevalidite, agences, idsequence } = cnsr;
+
+    const { taxe, tresor, cnsr_taxe, penalite_taxe, total } = calcultaxe(
+      'first',
+      typevehicule,
+    );
+    const libelleTypeVehicule = this.typeVehicule(typevehicule);
+    const netPayer = (total + parseInt(amount)).toFixed();
+    return {
+      cnsr,
+      year_tvm,
+      netPayer,
+      penalite_taxe,
+      libelleTypeVehicule,
+      taxe,
+      tresor,
+      cnsr_taxe,
+      total,
+      puissanceMoteur,
+      chassis,
+      dateMiseEnCirculation,
+      dateImmatriculation,
+      immatricuation,
+      nombreDePlace,
+      poidsCharge,
+      poidsVide,
+      poidsUtile,
+      amount,
+      penalite,
+      montantDu,
+      fiscale,
+      typevehicule,
+      dernieredate,
+      periodevalidite,
+      agences,
+      idsequence,
+      infoLiquidation,
+    };
+  }
 }

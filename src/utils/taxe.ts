@@ -46,6 +46,11 @@ export enum typeVehicule {
   TRICYCLE = 'TRICYCLE',
 }
 
+export enum categorieVehicule {
+  CTVL = 'CTVL',
+  CTPL = 'CTPL',
+  CTTAXI = 'CTTAXI',
+}
 export function getValidateDate(typeVehicule: string, lastDate: string) {
   const date = parse(lastDate, 'yyyy-MM-dd', new Date());
   let response = '';

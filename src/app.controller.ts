@@ -2,7 +2,12 @@ import { Body, Controller, Get, Post, Query, Req } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ClientService } from './client/client.service';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
-import { CnsrObject, DgiObject, typeVehicule } from './utils/taxe';
+import {
+  CnsrObject,
+  DgiObject,
+  categorieVehicule,
+  typeVehicule,
+} from './utils/taxe';
 
 @Controller()
 @ApiTags('TVM')
@@ -61,6 +66,19 @@ export class AppController {
     );
   }
 
+  @Get('/amountWithoutCnsrApi')
+  @ApiQuery({ name: 'immatriculatioNumber', type: String })
+  @ApiQuery({ name: 'vehiculeType', enum: typeVehicule })
+  @ApiQuery({ name: 'categorie', enum: categorieVehicule })
+  async getAllTvmAmountWithoutCnsrApi(@Query() query) {
+    console.log(query);
+    const { immatriculatioNumber, vehiculeType, categorie } = query;
+    return this.clientService.getAllTvmAmountWithoutCnsrApi(
+      immatriculatioNumber,
+      vehiculeType,
+      categorie,
+    );
+  }
   @Post('/cnsrNotify')
   async cnsrNotify(@Body() cnsrObject: CnsrObject) {
     console.log(
