@@ -493,4 +493,44 @@ export class ClientService {
       infoLiquidation,
     };
   }
+
+  async getTaxeCnsr(
+    immatriculationNumber: string,
+    typevehiculeForTaxe: string,
+  ): Promise<any> {
+    const cnsr = await this.getEtatVehicule(immatriculationNumber);
+    let dateForTaxe = '';
+    const {
+      typevehicule,
+      dernieredate,
+      dateecheance,
+      periodevalidite,
+      agences,
+      idsequence,
+    } = cnsr;
+    if (dateecheance === '') {
+      dateForTaxe = 'first';
+    }
+    if (typevehicule != '') {
+      typevehiculeForTaxe = typevehicule;
+    }
+    dateForTaxe = dateecheance;
+    const { taxe, tresor, cnsr_taxe, penalite_taxe, total } = calcultaxe(
+      dateForTaxe,
+      typevehiculeForTaxe,
+    );
+    return {
+      typevehicule,
+      dernieredate,
+      dateecheance,
+      periodevalidite,
+      agences,
+      idsequence,
+      taxe,
+      tresor,
+      cnsr_taxe,
+      penalite_taxe,
+      total,
+    };
+  }
 }

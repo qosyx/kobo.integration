@@ -102,4 +102,13 @@ export class AppController {
     const { immatriculatioNumber } = query;
     return this.clientService.getEtatVehicule(immatriculatioNumber);
   }
+
+  @Get('/getTaxeCnsr')
+  @ApiQuery({ name: 'immatriculatioNumber', type: String })
+  @ApiQuery({ name: 'vehiculeType', enum: typeVehicule })
+  async getTaxeCnsr(@Query() query) {
+    console.log(query);
+    const { immatriculatioNumber, vehiculeType } = query;
+    return this.clientService.getTaxeCnsr(immatriculatioNumber, vehiculeType);
+  }
 }
