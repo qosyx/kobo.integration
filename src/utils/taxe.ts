@@ -9,7 +9,7 @@ export function calcultaxe(dateEcheance: string, type: string) {
     penalite_taxe: 0,
     total: 0,
   };
-  let comparisonResultDesc = 0;
+  let comparisonResultDesc = -10;
   const Timbres = 2000;
   if (dateEcheance !== 'first') {
     const date = parse(dateEcheance, 'yyyy-MM-dd', new Date());
