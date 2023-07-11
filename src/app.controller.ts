@@ -105,7 +105,7 @@ export class AppController {
 
   @Get('/getTaxeCnsr')
   @ApiQuery({ name: 'immatriculatioNumber', type: String })
-  @ApiQuery({ name: 'vehiculeType', enum: typeVehicule })
+  @ApiQuery({ name: 'vehiculeType', enum: categorieVehicule })
   async getTaxeCnsr(@Query() query) {
     console.log(query);
     const { immatriculatioNumber, vehiculeType } = query;
