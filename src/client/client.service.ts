@@ -157,15 +157,33 @@ export class ClientService {
     } else {
       const date = parse(data[0].dateecheance, 'yyyy-MM-dd', new Date());
       const comparisonResultDesc = differenceInDays(date, new Date());
-      console.log(
-        `comparisonResultDesc: ${comparisonResultDesc}  ${date}  ${new Date()}`,
-      );
-      message = {
-        error: '200',
-        cause: 'all is good',
-      };
-      data[0].message = message;
-      return data[0];
+      if (comparisonResultDesc >= 120) {
+        const response = {
+          agences: '',
+          typevehicule: '',
+          immatriculation: '',
+          dernieredate: '',
+          dateecheance: '',
+          periodevalidite: '',
+          idsequence: '',
+          message: {
+            error: '401',
+            cause: '401 Unauthorize',
+          },
+        };
+
+        return response;
+      } else {
+        console.log(
+          `comparisonResultDesc: ${comparisonResultDesc}  ${date}  ${new Date()}`,
+        );
+        message = {
+          error: '200',
+          cause: 'all is good',
+        };
+        data[0].message = message;
+        return data[0];
+      }
     }
   }
 
