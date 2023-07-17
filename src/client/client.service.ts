@@ -157,7 +157,7 @@ export class ClientService {
     } else {
       const date = parse(data[0].dateecheance, 'yyyy-MM-dd', new Date());
       const comparisonResultDesc = differenceInDays(date, new Date());
-      if (comparisonResultDesc >= 120) {
+      if (comparisonResultDesc >= 100000000) {
         const response = {
           agences: '',
           typevehicule: '',
