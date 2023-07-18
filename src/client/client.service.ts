@@ -537,6 +537,7 @@ export class ClientService {
       dateForTaxe,
       typevehiculeForTaxe,
     );
+    const amount = total.toFixed();
     return {
       typevehicule,
       dernieredate,
@@ -549,6 +550,7 @@ export class ClientService {
       cnsr_taxe,
       penalite_taxe,
       total,
+      amount,
     };
   }
 }
