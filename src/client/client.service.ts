@@ -120,7 +120,10 @@ export class ClientService {
                   error: error.response.status,
                   cause: 'cnsr not found',
                 };
+                console.log(error.response.status);
+
               case 500:
+                console.log(error.response.status);
                 message = {
                   error: error.response.status,
                   cause: 'cnsr errror 500',
