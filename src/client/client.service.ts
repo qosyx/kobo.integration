@@ -121,13 +121,11 @@ export class ClientService {
                   cause: 'cnsr not found',
                 };
               case 500:
-                throw new InternalServerErrorException(
-                  error.response.statusText,
-                  {
-                    cause: new Error(),
-                    description: error.response.statusText,
-                  },
-                );
+                message = {
+                  error: error.response.status,
+                  cause: 'cnsr errror 500',
+                };
+
               default:
                 throw new HttpException(
                   error.response.statusText,
