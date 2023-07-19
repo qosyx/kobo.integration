@@ -59,12 +59,15 @@ export function getValidateDate(typeVehicule: string, lastDate: string) {
     case 'CTVL':
       response = addDays(date, 182).toISOString().split('T')[0];
       console.log(`getValidateDate response ${typeVehicule} date ${response}`);
+      break;
     case 'CTPL':
       response = addDays(date, 364).toISOString().split('T')[0];
       console.log(`getValidateDate response ${typeVehicule} date ${response}`);
+      break;
     case 'CTTAXI':
       response = addDays(date, 179).toISOString().split('T')[0];
       console.log(`getValidateDate response ${typeVehicule} date ${response}`);
+      break;
   }
   console.log(`getValidateDate response ${response}`);
 
