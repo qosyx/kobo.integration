@@ -139,6 +139,8 @@ export class ClientService {
         ),
     );
     const isEmpty = Object.entries(data).length === 0;
+    console.log(isEmpty);
+
     if (isEmpty) {
       const response = {
         agences: '',
