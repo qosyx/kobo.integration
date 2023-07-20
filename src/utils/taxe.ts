@@ -1,4 +1,4 @@
-import { parse, addDays, differenceInDays } from 'date-fns';
+import { parse, addMonths, differenceInDays } from 'date-fns';
 import { ApiProperty } from '@nestjs/swagger';
 
 export function calcultaxe(dateEcheance: string, type: string) {
@@ -57,15 +57,15 @@ export function getValidateDate(typeVehicule: string, lastDate: string) {
   console.log(`the date getValidateDate date ${lastDate}`);
   switch (typeVehicule) {
     case 'CTVL':
-      response = addDays(date, 360).toISOString().split('T')[0];
+      response = addMonths(date, 12).toISOString().split('T')[0];
       console.log(`getValidateDate response ${typeVehicule} date ${response}`);
       break;
     case 'CTPL':
-      response = addDays(date, 180).toISOString().split('T')[0];
+      response = addMonths(date, 6).toISOString().split('T')[0];
       console.log(`getValidateDate response ${typeVehicule} date ${response}`);
       break;
     case 'CTTAXI':
-      response = addDays(date, 90).toISOString().split('T')[0];
+      response = addMonths(date, 3).toISOString().split('T')[0];
       console.log(`getValidateDate response ${typeVehicule} date ${response}`);
       break;
   }
