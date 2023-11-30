@@ -27,7 +27,7 @@ const dgiNotifyHeader: AxiosRequestConfig = {
     // 'Uxp-Client': 'BJ/GOV/PNS/PRE-PROD-PORTAIL',
     // 'Uxp-Service': 'BJ/GOV/DGI/TVM/Statut_Paiement_TVM/v1',
     Authorization:
-      'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNjExNyIsImlhdCI6MTY3Mzk2NzQ1MiwiZXhwIjoxNzQ2NTQzNDUyfQ.fzb5xBFJaFnwirt3eTme659NUtcd8U0ZTh6a3gOO2rHrVF8nzrBEq4865juZDVbbcS6xkgF5Qc0-B5FgxxpNww',
+      'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzOTc2NyIsImlhdCI6MTY4NTAzODg3OSwiZXhwIjoxNzU3NjE0ODc5fQ.IunQDZTZPjn5B_secUMLktUB1wOQvxALiSbt-w63xqQQ1YW9aITia4kQkfVANHeuDRTtHLn62hHQtg6_1o94Dw',
   },
 };
 
