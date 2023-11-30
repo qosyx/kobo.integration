@@ -404,7 +404,7 @@ export class ClientService {
     const { data } = await firstValueFrom(
       this.httpService
         .post<any>(
-          `https://developper.impots.bj/tvm/api/paiement/e-visite-notification`,
+          `https://backendtvmmobile.impots.bj/tvm/api/paiement/e-visite-notification`,
           dgiObject,
           dgiNotifyHeader,
         )
