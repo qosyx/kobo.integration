@@ -1,5 +1,11 @@
 import { HttpService } from '@nestjs/axios';
-import { parse, compareDesc, addDays, differenceInDays } from 'date-fns';
+import {
+  parse,
+  formatRFC3339,
+  compareDesc,
+  addDays,
+  differenceInDays,
+} from 'date-fns';
 import {
   HttpException,
   Injectable,
@@ -320,7 +326,7 @@ export class ClientService {
       agences,
       idsequence,
     } = cnsr;
-
+    const datepay = formatRFC3339(new Date());
     const { taxe, tresor, cnsr_taxe, penalite_taxe, total } = calcultaxe(
       dateecheance,
       typevehicule,
@@ -328,6 +334,7 @@ export class ClientService {
     const libelleTypeVehicule = this.typeVehicule(typevehicule);
     const netPayer = (total + parseInt(amount)).toFixed();
     return {
+      datepay,
       year_tvm,
       netPayer,
       penalite_taxe,
@@ -490,8 +497,10 @@ export class ClientService {
     );
     const libelleTypeVehicule = this.typeVehicule(typevehicule);
     const netPayer = (total + parseInt(amount)).toFixed();
+    const datepay = formatRFC3339(new Date());
     return {
       cnsr,
+      datepay,
       year_tvm,
       netPayer,
       penalite_taxe,
