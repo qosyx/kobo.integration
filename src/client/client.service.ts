@@ -112,10 +112,6 @@ export class ClientService {
           catchError((error: AxiosError) => {
             switch (error.response.status) {
               case 404:
-                // throw new NotFoundException(error.response.status, {
-                //   cause: new Error(),
-                //   description: error.response.statusText,
-                // });
                 message = {
                   error: error.response.status,
                   cause: 'cnsr not found',
@@ -160,7 +156,8 @@ export class ClientService {
     } else {
       const date = parse(data[0].dateecheance, 'yyyy-MM-dd', new Date());
       const comparisonResultDesc = differenceInDays(date, new Date());
-      if (comparisonResultDesc >= 100000000) {
+      // check if technical visit date is correct
+      if (comparisonResultDesc >= 10) {
         const response = {
           agences: '',
           typevehicule: '',
@@ -269,14 +266,23 @@ export class ClientService {
           marque,
           year[i],
         );
-        const data = {
+        let data = {
           amount: r['totalDu'],
           penalite: r['penalite'],
           montantDu: r['montantDu'],
           year: year[i],
         };
         console.log(data);
-
+        const d = new Date();
+        const fullYear = d.getFullYear();
+        if (data[year] != fullYear) {
+          data = {
+            amount: 0,
+            penalite: 0,
+            montantDu: 0,
+            year: 0,
+          };
+        }
         fiscale.push(data);
         infoLiquidation = r;
       } catch (error) {
