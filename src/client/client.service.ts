@@ -266,23 +266,14 @@ export class ClientService {
           marque,
           year[i],
         );
-        let data = {
+        const data = {
           amount: r['totalDu'],
           penalite: r['penalite'],
           montantDu: r['montantDu'],
           year: year[i],
         };
         console.log(data);
-        const d = new Date();
-        const fullYear = d.getFullYear();
-        if (data[year] != fullYear) {
-          data = {
-            amount: 0,
-            penalite: 0,
-            montantDu: 0,
-            year: 0,
-          };
-        }
+
         fiscale.push(data);
         infoLiquidation = r;
       } catch (error) {
@@ -302,8 +293,13 @@ export class ClientService {
     penalite = penalite.toFixed(0);
     montantDu = montantDu.toFixed(0);
     const year_tvm = fiscale[0]['year'];
-    // infoLiqu = infoLiquidation['data']['object']['vehicule'];
-    // console.log(infoLiqu);
+    const d = new Date();
+    const fullYear = d.getFullYear();
+    if (year_tvm != fullYear) {
+      amount = 0;
+      penalite = 0;
+      montantDu = 0;
+    }
 
     const {
       puissanceMoteur,
@@ -467,8 +463,13 @@ export class ClientService {
     penalite = penalite.toFixed(0);
     montantDu = montantDu.toFixed(0);
     const year_tvm = fiscale[0]['year'];
-    // infoLiqu = infoLiquidation['data']['object']['vehicule'];
-    // console.log(infoLiqu);
+    const d = new Date();
+    const fullYear = d.getFullYear();
+    if (year_tvm != fullYear) {
+      amount = 0;
+      penalite = 0;
+      montantDu = 0;
+    }
 
     const {
       puissanceMoteur,
