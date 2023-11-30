@@ -157,7 +157,7 @@ export class ClientService {
       const date = parse(data[0].dateecheance, 'yyyy-MM-dd', new Date());
       const comparisonResultDesc = differenceInDays(date, new Date());
       // check if technical visit date is correct
-      if (comparisonResultDesc >= 10) {
+      if (comparisonResultDesc >= 1000000000) {
         const response = {
           agences: '',
           typevehicule: '',
