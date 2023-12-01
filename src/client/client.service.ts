@@ -401,13 +401,36 @@ export class ClientService {
     };
   }
 
-  async getAllTvmAmount2(immatriculationNumber: string) {
+  async getAllTvmAmount2(immatriculationNumber: string, marque: string) {
     let year = await this.getStatOfPay(immatriculationNumber);
     year = year.sort((a, b) => b - a);
     console.log(year);
     const fiscale: Array<any> = [];
     let infoLiquidation: any;
 
+    for (let i = 0; i < year.length; i++) {
+      try {
+        const r = await this.liquidation(
+          immatriculationNumber,
+          marque,
+          year[i],
+        );
+        const data = {
+          amount: r['totalDu'],
+          penalite: r['penalite'],
+          montantDu: r['montantDu'],
+          year: year[i],
+        };
+        console.log(data);
+
+        fiscale.push(data);
+        infoLiquidation = r;
+      } catch (error) {
+        console.log(error.message);
+      }
+
+      // this.liquidation(immatriculationNumber, marque, year[i]);
+    }
     console.log(infoLiquidation.data.object.vehicule.poidsCharge);
 
     console.log(fiscale[0]);
