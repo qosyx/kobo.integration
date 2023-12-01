@@ -265,6 +265,17 @@ export class ClientService {
     console.log(year);
     const fiscale: Array<any> = [];
     let infoLiquidation: any;
+    if (year.length == 0) {
+      infoLiquidation = [];
+      const data = {
+        amount: 0,
+        penalite: 0,
+        montantDu: 0,
+        year: 0,
+      };
+      fiscale.push(data);
+    } else {
+    }
     for (let i = 0; i < year.length; i++) {
       try {
         const r = await this.liquidation(
@@ -290,7 +301,6 @@ export class ClientService {
     }
     console.log(infoLiquidation.data.object.vehicule.poidsCharge);
 
-    const cnsr = await this.getEtatVehicule(immatriculationNumber);
     console.log(fiscale[0]);
 
     // eslint-disable-next-line prefer-const
@@ -318,6 +328,7 @@ export class ClientService {
       poidsVide,
       poidsUtile,
     } = infoLiquidation['data']['object']['vehicule'];
+    const cnsr = await this.getEtatVehicule(immatriculationNumber);
     const {
       typevehicule,
       dernieredate,
@@ -365,7 +376,17 @@ export class ClientService {
       infoLiquidation,
     };
   }
-
+  async refersToRightsFunction(
+    year: [],
+    immatriculationNumber: string,
+    marque: string,
+  ): Promise<any> {
+    if (year.length == 0) {
+      return this.getAllTvmAmount(immatriculationNumber, marque);
+    } else {
+      [];
+    }
+  }
   async notifyerCnsr(cnsrObject: CnsrObject): Promise<any> {
     const datevisite = new Date().toISOString().split('T')[0];
     cnsrObject.datevisite = datevisite;

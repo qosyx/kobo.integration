@@ -111,4 +111,18 @@ export class AppController {
     const { immatriculatioNumber, vehiculeType } = query;
     return this.clientService.getTaxeCnsr(immatriculatioNumber, vehiculeType);
   }
+
+  @Get('/amountWithDgiOption')
+  @ApiQuery({ name: 'immatriculatioNumber', type: String })
+  @ApiQuery({ name: 'vehiculeType', enum: typeVehicule })
+  @ApiQuery({ name: 'categorie', enum: categorieVehicule })
+  async refersToRightsFunction(@Query() query) {
+    console.log(query);
+    const { immatriculatioNumber, vehiculeType, categorie } = query;
+    return this.clientService.getAllTvmAmountWithoutCnsrApi(
+      immatriculatioNumber,
+      vehiculeType,
+      categorie,
+    );
+  }
 }
