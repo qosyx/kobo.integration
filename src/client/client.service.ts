@@ -401,65 +401,15 @@ export class ClientService {
     };
   }
 
-  async getAllTvmAmount2(immatriculationNumber: string, marque: string) {
+  async getAllTvmAmount2(immatriculationNumber: string) {
     let year = await this.getStatOfPay(immatriculationNumber);
     year = year.sort((a, b) => b - a);
     console.log(year);
     const fiscale: Array<any> = [];
     let infoLiquidation: any;
-
-    for (let i = 0; i < year.length; i++) {
-      try {
-        const r = await this.liquidation(
-          immatriculationNumber,
-          marque,
-          year[i],
-        );
-        const data = {
-          amount: r['totalDu'],
-          penalite: r['penalite'],
-          montantDu: r['montantDu'],
-          year: year[i],
-        };
-        console.log(data);
-
-        fiscale.push(data);
-        infoLiquidation = r;
-      } catch (error) {
-        console.log(error.message);
-      }
-
-      // this.liquidation(immatriculationNumber, marque, year[i]);
-    }
-    console.log(infoLiquidation.data.object.vehicule.poidsCharge);
-
-    console.log(fiscale[0]);
-
-    // eslint-disable-next-line prefer-const
-    let { amount, penalite, montantDu } = fiscale[0];
-    amount = amount.toFixed(0);
-    penalite = penalite.toFixed(0);
-    montantDu = montantDu.toFixed(0);
-    const year_tvm = fiscale[0]['year'];
-    const d = new Date();
-    const fullYear = d.getFullYear();
-    if (year_tvm != fullYear) {
-      amount = 0;
-      penalite = 0;
-      montantDu = 0;
-    }
-
-    const {
-      puissanceMoteur,
-      chassis,
-      dateMiseEnCirculation,
-      dateImmatriculation,
-      immatricuation,
-      nombreDePlace,
-      poidsCharge,
-      poidsVide,
-      poidsUtile,
-    } = infoLiquidation['data']['object']['vehicule'];
+    const amount = 0;
+    const penalite = 0;
+    const montantDu = 0;
     const cnsr = await this.getEtatVehicule(immatriculationNumber);
     const {
       typevehicule,
@@ -475,10 +425,9 @@ export class ClientService {
       typevehicule,
     );
     const libelleTypeVehicule = this.typeVehicule(typevehicule);
-    const netPayer = (total + parseInt(amount)).toFixed();
+    const netPayer = total.toFixed();
     return {
       datepay,
-      year_tvm,
       netPayer,
       penalite_taxe,
       libelleTypeVehicule,
@@ -486,15 +435,7 @@ export class ClientService {
       tresor,
       cnsr_taxe,
       total,
-      puissanceMoteur,
-      chassis,
-      dateMiseEnCirculation,
-      dateImmatriculation,
-      immatricuation,
-      nombreDePlace,
-      poidsCharge,
-      poidsVide,
-      poidsUtile,
+
       amount,
       penalite,
       montantDu,
@@ -521,7 +462,7 @@ export class ClientService {
       const cnsr = await this.getEtatVehicule(immatriculationNumber);
       console.log(cnsr);
 
-      return await this.getAllTvmAmount2(immatriculationNumber, marque);
+      return await this.getAllTvmAmount2(immatriculationNumber);
     }
   }
   async notifyerCnsr(cnsrObject: CnsrObject): Promise<any> {
