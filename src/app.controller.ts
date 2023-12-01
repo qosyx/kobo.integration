@@ -119,7 +119,7 @@ export class AppController {
   async refersToRightsFunction(@Query() query) {
     console.log(query);
     const { immatriculatioNumber, vehiculeType, categorie } = query;
-    return this.clientService.getAllTvmAmountWithoutCnsrApi(
+    return this.clientService.refersToRightsFunction(
       immatriculatioNumber,
       vehiculeType,
       categorie,
