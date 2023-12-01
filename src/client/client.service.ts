@@ -259,23 +259,46 @@ export class ClientService {
     };
   }
 
+  async getCnsrTaxeWithoutTvm(immatriculationNumber: string): Promise<any> {
+    const cnsr = await this.getEtatVehicule(immatriculationNumber);
+    const {
+      typevehicule,
+      dernieredate,
+      dateecheance,
+      periodevalidite,
+      agences,
+      idsequence,
+    } = cnsr;
+    const datepay = formatRFC3339(new Date());
+    const { taxe, tresor, cnsr_taxe, penalite_taxe, total } = calcultaxe(
+      dateecheance,
+      typevehicule,
+    );
+    const libelleTypeVehicule = this.typeVehicule(typevehicule);
+    const netPayer = total.toFixed();
+    return {
+      datepay,
+      taxe,
+      tresor,
+      cnsr_taxe,
+      penalite_taxe,
+      netPayer,
+      typevehicule,
+      dernieredate,
+      dateecheance,
+      periodevalidite,
+      agences,
+      idsequence,
+      libelleTypeVehicule,
+    };
+  }
   async getAllTvmAmount(immatriculationNumber: string, marque: string) {
     let year = await this.getStatOfPay(immatriculationNumber);
     year = year.sort((a, b) => b - a);
     console.log(year);
     const fiscale: Array<any> = [];
     let infoLiquidation: any;
-    if (year.length == 0) {
-      infoLiquidation = [];
-      const data = {
-        amount: 0,
-        penalite: 0,
-        montantDu: 0,
-        year: 0,
-      };
-      fiscale.push(data);
-    } else {
-    }
+
     for (let i = 0; i < year.length; i++) {
       try {
         const r = await this.liquidation(
@@ -384,7 +407,7 @@ export class ClientService {
     if (year.length == 0) {
       return this.getAllTvmAmount(immatriculationNumber, marque);
     } else {
-      [];
+      return this.getCnsrTaxeWithoutTvm(immatriculationNumber);
     }
   }
   async notifyerCnsr(cnsrObject: CnsrObject): Promise<any> {
