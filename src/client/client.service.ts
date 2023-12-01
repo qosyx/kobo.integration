@@ -430,7 +430,7 @@ export class ClientService {
     year = year.sort((a, b) => b - a);
     console.log(year);
     const fiscale: Array<any> = [];
-    let infoLiquidation: any;
+
     const amount = 0;
     const penalite = 0;
     const montantDu = 0;
@@ -461,6 +461,16 @@ export class ClientService {
     const poidsCharge = infoVehicule['npoidstotalencharge'];
     const poidsVide = infoVehicule['nPoidsavide'];
     const poidsUtile = 0;
+    // const sMarque = infoVehicule['sMarque'];
+    const infoLiquidation = {
+      data: {
+        object: {
+          vehicule: {
+            marque: infoVehicule['sMarque'],
+          },
+        },
+      },
+    };
     return {
       puissanceMoteur,
       dateMiseEnCirculation,
