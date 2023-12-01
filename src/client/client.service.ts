@@ -141,7 +141,7 @@ export class ClientService {
     );
     const isEmpty = Object.entries(data).length === 0;
     console.log(isEmpty);
-    console.log(`data cnsr ${data}`);
+    console.log(`data cnsr ${data[0]}`);
 
     if (isEmpty) {
       const response = {
