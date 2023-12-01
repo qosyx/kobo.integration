@@ -277,6 +277,7 @@ export class ClientService {
     const libelleTypeVehicule = this.typeVehicule(typevehicule);
     const netPayer = total.toFixed();
     return {
+      cnsr,
       datepay,
       taxe,
       tresor,
