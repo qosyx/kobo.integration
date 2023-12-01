@@ -115,14 +115,12 @@ export class AppController {
   @Get('/amountWithDgiOption')
   @ApiQuery({ name: 'immatriculatioNumber', type: String })
   @ApiQuery({ name: 'vehiculeType', enum: typeVehicule })
-  @ApiQuery({ name: 'categorie', enum: categorieVehicule })
   async refersToRightsFunction(@Query() query) {
     console.log(query);
-    const { immatriculatioNumber, vehiculeType, categorie } = query;
+    const { immatriculatioNumber, vehiculeType } = query;
     return this.clientService.refersToRightsFunction(
       immatriculatioNumber,
       vehiculeType,
-      categorie,
     );
   }
 }
