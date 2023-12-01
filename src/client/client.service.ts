@@ -408,6 +408,9 @@ export class ClientService {
     if (year.length == 0) {
       return this.getAllTvmAmount(immatriculationNumber, marque);
     } else {
+      const cnsr = await this.getEtatVehicule(immatriculationNumber);
+      console.log(cnsr);
+
       return this.getCnsrTaxeWithoutTvm(immatriculationNumber);
     }
   }
