@@ -27,6 +27,12 @@ const requestConfig: AxiosRequestConfig = {
     'Uxp-Service': 'BJ/GOV/DGI/TVM/Statut_Paiement_TVM/v1',
   },
 };
+const anattConfig: AxiosRequestConfig = {
+  headers: {
+    'Uxp-Client': 'BJ/GOV/PNS/PRE-PROD-PORTAIL',
+    'Uxp-Service': 'BJ/GOV/ANATT/API-IMMATRICULATION/tvm/v1',
+  },
+};
 const dgiNotifyHeader: AxiosRequestConfig = {
   headers: {
     // 'Uxp-Client': 'BJ/GOV/PNS/PRE-PROD-PORTAIL',
@@ -191,6 +197,24 @@ export class ClientService {
         return data[0];
       }
     }
+  }
+
+  async getVehiculeInfoFromAntt(immatriculationNumber: string): Promise<any> {
+    const { data } = await firstValueFrom(
+      this.httpService
+        .get<any>(
+          `http://pns-ss01.xroad.bj:8081/restapi/${immatriculationNumber}`,
+          anattConfig,
+        )
+        .pipe(
+          catchError((error: AxiosError) =>
+            this.handleError(error, immatriculationNumber),
+          ),
+        ),
+    );
+    // console.log(Object.values(data).filter((res) => res != 'notPaid'));
+
+    return data;
   }
 
   async getPaiementStatut(
@@ -426,7 +450,26 @@ export class ClientService {
     );
     const libelleTypeVehicule = this.typeVehicule(typevehicule);
     const netPayer = total.toFixed();
+    const infoVehicule = await this.getVehiculeInfoFromAntt(
+      immatriculationNumber,
+    );
+    const chassis = infoVehicule['nchassis'];
+    const puissanceMoteur = infoVehicule['npuissance'];
+    const dateMiseEnCirculation = infoVehicule['datedemiseencirculation'];
+    const dateImmatriculation = infoVehicule['dateimmatriculation'];
+    const nombreDePlace = infoVehicule['nbreplace'];
+    const poidsCharge = infoVehicule['npoidstotalencharge'];
+    const poidsVide = infoVehicule['nPoidsavide'];
+    const poidsUtile = 0;
     return {
+      puissanceMoteur,
+      dateMiseEnCirculation,
+      dateImmatriculation,
+      nombreDePlace,
+      poidsCharge,
+      poidsVide,
+      poidsUtile,
+      chassis,
       datepay,
       netPayer,
       penalite_taxe,
@@ -435,7 +478,6 @@ export class ClientService {
       tresor,
       cnsr_taxe,
       total,
-
       amount,
       penalite,
       montantDu,
@@ -459,9 +501,6 @@ export class ClientService {
     if (year.length != 0) {
       return await this.getAllTvmAmount(immatriculationNumber, marque);
     } else {
-      const cnsr = await this.getEtatVehicule(immatriculationNumber);
-      console.log(cnsr);
-
       return await this.getAllTvmAmount2(immatriculationNumber);
     }
   }
