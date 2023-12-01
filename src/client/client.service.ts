@@ -12,7 +12,6 @@ import {
   InternalServerErrorException,
   Logger,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { AxiosError, AxiosRequestConfig } from 'axios';
 import { Observable, catchError, firstValueFrom, of } from 'rxjs';
@@ -142,6 +141,7 @@ export class ClientService {
     );
     const isEmpty = Object.entries(data).length === 0;
     console.log(isEmpty);
+    console.log(`data cnsr ${data}`);
 
     if (isEmpty) {
       const response = {
