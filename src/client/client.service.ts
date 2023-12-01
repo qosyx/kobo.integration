@@ -513,13 +513,13 @@ export class ClientService {
     immatriculationNumber: string,
     marque: string,
   ): Promise<any> {
-    if (year.length == 0) {
+    if (year.length != 0) {
       return this.getAllTvmAmount(immatriculationNumber, marque);
     } else {
       const cnsr = await this.getEtatVehicule(immatriculationNumber);
       console.log(cnsr);
 
-      return this.getAllTvmAmount2(immatriculationNumber);
+      return this.getAllTvmAmount2(immatriculationNumber, marque);
     }
   }
   async notifyerCnsr(cnsrObject: CnsrObject): Promise<any> {
