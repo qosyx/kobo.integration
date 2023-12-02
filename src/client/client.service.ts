@@ -573,7 +573,79 @@ export class ClientService {
 
     return data;
   }
+  async getAllTvmAmountVehiculeNeuf(immatriculationNumber: string) {
+    const fiscale: Array<any> = [];
 
+    const amount = 0;
+    const penalite = 0;
+    const montantDu = 0;
+    const cnsr = await this.getEtatVehicule(immatriculationNumber);
+    const {
+      typevehicule,
+      dernieredate,
+      dateecheance,
+      periodevalidite,
+      agences,
+      idsequence,
+    } = cnsr;
+    const datepay = formatRFC3339(new Date());
+    const { taxe, tresor, cnsr_taxe, penalite_taxe, total } = calcultaxe(
+      'first',
+      typevehicule,
+    );
+    const libelleTypeVehicule = this.typeVehicule(typevehicule);
+    const netPayer = total.toFixed();
+    const infoVehicule = await this.getVehiculeInfoFromAntt(
+      immatriculationNumber,
+    );
+    const chassis = infoVehicule['nchassis'];
+    const puissanceMoteur = infoVehicule['npuissance'];
+    const dateMiseEnCirculation = infoVehicule['datedemiseencirculation'];
+    const dateImmatriculation = infoVehicule['dateimmatriculation'];
+    const nombreDePlace = infoVehicule['nbreplace'];
+    const poidsCharge = infoVehicule['npoidstotalencharge'];
+    const poidsVide = infoVehicule['nPoidsavide'];
+    const poidsUtile = 0;
+    // const sMarque = infoVehicule['sMarque'];
+    const infoLiquidation = {
+      data: {
+        object: {
+          vehicule: {
+            marque: infoVehicule['sMarque'],
+          },
+        },
+      },
+    };
+    return {
+      puissanceMoteur,
+      dateMiseEnCirculation,
+      dateImmatriculation,
+      nombreDePlace,
+      poidsCharge,
+      poidsVide,
+      poidsUtile,
+      chassis,
+      datepay,
+      netPayer,
+      penalite_taxe,
+      libelleTypeVehicule,
+      taxe,
+      tresor,
+      cnsr_taxe,
+      total,
+      amount,
+      penalite,
+      montantDu,
+      fiscale,
+      typevehicule,
+      dernieredate,
+      dateecheance,
+      periodevalidite,
+      agences,
+      idsequence,
+      infoLiquidation,
+    };
+  }
   async getAllTvmAmountWithoutCnsrApi(
     immatriculationNumber: string,
     marque: string,
@@ -719,5 +791,24 @@ export class ClientService {
       total,
       amount,
     };
+  }
+
+  async refersToRightsFunctionWithoutCnsrApi(
+    immatriculationNumber: string,
+    marque: string,
+    typevehicule: string,
+  ): Promise<any> {
+    const year = await this.getStatOfPay(immatriculationNumber);
+    console.log(`refersToRightsFunction ${year}`);
+
+    if (year.length != 0) {
+      return await this.getAllTvmAmountWithoutCnsrApi(
+        immatriculationNumber,
+        marque,
+        typevehicule,
+      );
+    } else {
+      return await this.getAllTvmAmountVehiculeNeuf(immatriculationNumber);
+    }
   }
 }

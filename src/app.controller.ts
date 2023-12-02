@@ -123,4 +123,18 @@ export class AppController {
       vehiculeType,
     );
   }
+
+  @Get('/amountWithDgiCnsrOption')
+  @ApiQuery({ name: 'immatriculatioNumber', type: String })
+  @ApiQuery({ name: 'vehiculeType', enum: typeVehicule })
+  @ApiQuery({ name: 'categorie', enum: categorieVehicule })
+  async refersToRightsFunctionWithoutCnsrApi(@Query() query) {
+    console.log(query);
+    const { immatriculatioNumber, vehiculeType, categorie } = query;
+    return this.clientService.refersToRightsFunctionWithoutCnsrApi(
+      immatriculatioNumber,
+      vehiculeType,
+      categorie,
+    );
+  }
 }
