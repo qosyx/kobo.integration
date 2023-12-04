@@ -573,21 +573,25 @@ export class ClientService {
 
     return data;
   }
-  async getAllTvmAmountVehiculeNeuf(immatriculationNumber: string) {
+  async getAllTvmAmountVehiculeNeuf(
+    immatriculationNumber: string,
+    marque: string,
+    typevehicule: string,
+  ) {
     const fiscale: Array<any> = [];
 
     const amount = 0;
     const penalite = 0;
     const montantDu = 0;
-    const cnsr = await this.getEtatVehicule(immatriculationNumber);
-    const {
-      typevehicule,
-      dernieredate,
-      dateecheance,
-      periodevalidite,
-      agences,
-      idsequence,
-    } = cnsr;
+    // const cnsr = await this.getEtatVehicule(immatriculationNumber);
+    // const {
+    //   typevehicule,
+    //   dernieredate,
+    //   dateecheance,
+    //   periodevalidite,
+    //   agences,
+    //   idsequence,
+    // } = cnsr;
     const datepay = formatRFC3339(new Date());
     const { taxe, tresor, cnsr_taxe, penalite_taxe, total } = calcultaxe(
       'first',
@@ -638,11 +642,11 @@ export class ClientService {
       montantDu,
       fiscale,
       typevehicule,
-      dernieredate,
-      dateecheance,
-      periodevalidite,
-      agences,
-      idsequence,
+      // dernieredate,
+      // dateecheance,
+      // periodevalidite,
+      // agences,
+      // idsequence,
       infoLiquidation,
     };
   }
@@ -681,7 +685,7 @@ export class ClientService {
     }
     console.log(infoLiquidation.data.object.vehicule.poidsCharge);
 
-    const cnsr = await this.getEtatVehicule(immatriculationNumber);
+    // const cnsr = await this.getEtatVehicule(immatriculationNumber);
     console.log(fiscale[0]);
 
     // eslint-disable-next-line prefer-const
@@ -709,7 +713,7 @@ export class ClientService {
       poidsVide,
       poidsUtile,
     } = infoLiquidation['data']['object']['vehicule'];
-    const { dernieredate, periodevalidite, agences, idsequence } = cnsr;
+    // const { dernieredate, periodevalidite, agences, idsequence } = cnsr;
 
     const { taxe, tresor, cnsr_taxe, penalite_taxe, total } = calcultaxe(
       'first',
@@ -719,7 +723,7 @@ export class ClientService {
     const netPayer = (total + parseInt(amount)).toFixed();
     const datepay = formatRFC3339(new Date());
     return {
-      cnsr,
+      // cnsr,
       datepay,
       year_tvm,
       netPayer,
@@ -743,10 +747,10 @@ export class ClientService {
       montantDu,
       fiscale,
       typevehicule,
-      dernieredate,
-      periodevalidite,
-      agences,
-      idsequence,
+      // dernieredate,
+      // periodevalidite,
+      // agences,
+      // idsequence,
       infoLiquidation,
     };
   }
@@ -808,7 +812,11 @@ export class ClientService {
         typevehicule,
       );
     } else {
-      return await this.getAllTvmAmountVehiculeNeuf(immatriculationNumber);
+      return await this.getAllTvmAmountVehiculeNeuf(
+        immatriculationNumber,
+        marque,
+        typevehicule,
+      );
     }
   }
 }
