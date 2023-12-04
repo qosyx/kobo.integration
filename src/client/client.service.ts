@@ -803,15 +803,23 @@ export class ClientService {
     typevehicule: string,
   ): Promise<any> {
     const year = await this.getStatOfPay(immatriculationNumber);
-    console.log(`refersToRightsFunction ${year}`);
+    console.log(
+      `refersToRightsFunctionWithoutCnsrApi ${immatriculationNumber}`,
+    );
 
     if (year.length != 0) {
+      console.log(
+        `refersToRightsFunctionWithoutCnsrApi getAllTvmAmountWithoutCnsrApi${immatriculationNumber}`,
+      );
       return await this.getAllTvmAmountWithoutCnsrApi(
         immatriculationNumber,
         marque,
         typevehicule,
       );
     } else {
+      console.log(
+        `getAllTvmAmountVehiculeNeuf getAllTvmAmountWithoutCnsrApi${immatriculationNumber}`,
+      );
       return await this.getAllTvmAmountVehiculeNeuf(
         immatriculationNumber,
         marque,
