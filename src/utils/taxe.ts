@@ -85,8 +85,6 @@ export class CnsrObject {
   datevalidite: string;
   @ApiProperty({ default: 'PARAKOU' })
   agences: string;
-  @ApiProperty({ default: '100125541' })
-  idsequence: string;
 }
 
 export class DgiObject {
