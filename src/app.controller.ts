@@ -124,7 +124,7 @@ export class AppController {
     );
   }
 
-  @Get('/amountWithDgiCnsrOption')
+  @Get('/refersToRightsFunctionWithoutCnsrApi')
   @ApiQuery({ name: 'immatriculatioNumber', type: String })
   @ApiQuery({ name: 'vehiculeType', enum: typeVehicule })
   @ApiQuery({ name: 'categorie', enum: categorieVehicule })
