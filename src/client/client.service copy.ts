@@ -42,6 +42,12 @@ const dgiNotifyHeader: AxiosRequestConfig = {
   },
 };
 
+const configKobo: AxiosRequestConfig = {
+  headers: {
+    Authorization: 'Bearer 23bc1381729a2c221d4dce34d707f347b1ba8058',
+  },
+};
+
 const cnsrNotifyHeader: AxiosRequestConfig = {
   headers: {
     'Uxp-Client': 'BJ/GOV/PNS/PRE-PROD-PORTAIL',
@@ -559,7 +565,7 @@ export class ClientService {
     const { data } = await firstValueFrom(
       this.httpService
         .post<any>(
-          `https://backendtvmmobile.impots.bj/api/paiement/e-visite-notification`,
+          `https://backendtvmmobile.impots.bj/tvm/api/paiement/e-visite-notification`,
           dgiObject,
           dgiNotifyHeader,
         )
@@ -573,6 +579,73 @@ export class ClientService {
 
     return data;
   }
+
+  async koboTest(): Promise<any> {
+    // dgiObject.datePaiement = new Date();
+    const payload = {
+      asset_type: 'survey',
+      content: {
+        schema: '1',
+        survey: [
+          {
+            name: 'start',
+            type: 'start',
+            $kuid: '6nQEm33DD',
+            $qpath: 'start',
+            $xpath: 'start',
+            $autoname: 'start',
+          },
+          {
+            name: 'end',
+            type: 'end',
+            $kuid: 'Y7BGuR4aO',
+            $qpath: 'end',
+            $xpath: 'end',
+            $autoname: 'end',
+          },
+          {
+            type: 'select_one',
+            $kuid: 'kp2rb10',
+            label: ['test'],
+            $qpath: 'test',
+            $xpath: 'test',
+            required: false,
+            $autoname: 'test',
+            select_from_list_name: 'ku1hs76',
+          },
+        ],
+        choices: [
+          {
+            name: 'option_1',
+            $kuid: 'Lpo1xiiSkwd',
+            label: ['Option 10'],
+            list_name: 'ku1hs76',
+            $autovalue: 'option_1',
+          },
+        ],
+        settings: {},
+        translated: ['label'],
+        translations: [null],
+      },
+    };
+    const { data } = await firstValueFrom(
+      this.httpService
+        .put<any>(
+          `http://kf.kobo.local/api/v2/assets/aFqccqGheZS6praB3kL6Rf/`,
+          payload,
+          configKobo,
+        )
+        .pipe(
+          catchError((error: AxiosError) =>
+            this.handleError(error, 'dgiObject.immatriculation'),
+          ),
+        ),
+    );
+    console.log(data);
+
+    return data;
+  }
+
   async getAllTvmAmountVehiculeNeuf(
     immatriculationNumber: string,
     marque: string,
