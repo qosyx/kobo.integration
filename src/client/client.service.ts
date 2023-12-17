@@ -1,11 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import {
-  parse,
-  formatRFC3339,
-  compareDesc,
-  addDays,
-  differenceInDays,
-} from 'date-fns';
+
 import {
   HttpException,
   Injectable,
@@ -15,56 +9,332 @@ import {
 } from '@nestjs/common';
 import { AxiosError, AxiosRequestConfig } from 'axios';
 import { Observable, catchError, firstValueFrom, of } from 'rxjs';
-import {
-  calcultaxe,
-  getValidateDate,
-  CnsrObject,
-  DgiObject,
-} from '../utils/taxe';
-const requestConfig: AxiosRequestConfig = {
-  headers: {
-    'Uxp-Client': 'BJ/GOV/PNS/PRE-PROD-PORTAIL',
-    'Uxp-Service': 'BJ/GOV/DGI/TVM/Statut_Paiement_TVM/v1',
-  },
-};
-const anattConfig: AxiosRequestConfig = {
-  headers: {
-    'Uxp-Client': 'BJ/GOV/PNS/PRE-PROD-PORTAIL',
-    'Uxp-Service': 'BJ/GOV/ANATT/API-IMMATRICULATION/tvm/v1',
-  },
-};
-const dgiNotifyHeader: AxiosRequestConfig = {
-  headers: {
-    // 'Uxp-Client': 'BJ/GOV/PNS/PRE-PROD-PORTAIL',
-    // 'Uxp-Service': 'BJ/GOV/DGI/TVM/Statut_Paiement_TVM/v1',
-    Authorization:
-      'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzOTc2NyIsImlhdCI6MTY4NTAzODg3OSwiZXhwIjoxNzU3NjE0ODc5fQ.IunQDZTZPjn5B_secUMLktUB1wOQvxALiSbt-w63xqQQ1YW9aITia4kQkfVANHeuDRTtHLn62hHQtg6_1o94Dw',
+const dceHeader: AxiosRequestConfig = {
+  headers: { 
+    Authorization: 'Token 23bc1381729a2c221d4dce34d707f347b1ba8058',
   },
 };
 
-const cnsrNotifyHeader: AxiosRequestConfig = {
-  headers: {
-    'Uxp-Client': 'BJ/GOV/PNS/PRE-PROD-PORTAIL',
-    'Uxp-Service': 'BJ/GOV/CNSR/SECUROUTE/addvoiture/v1',
+const dataDce = {
+  url: 'http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva/',
+  owner: 'http://kf.kobo.local/api/v2/users/super_admin/',
+  owner__username: 'super_admin',
+  parent: null,
+  settings: {
+    sector: {
+      label: 'Administration publique',
+      value: 'Public Administration',
+    },
+    country: [
+      {
+        label: 'Benin',
+        value: 'BEN',
+      },
+    ],
+    description: 'DCE 2',
+    collects_pii: null,
+    organization: '',
+    country_codes: ['BEN'],
+    operational_purpose: null,
   },
-};
-const requestConfig2: AxiosRequestConfig = {
-  headers: {
-    'Uxp-Client': 'BJ/GOV/PNS/PRE-PROD-PORTAIL',
-    'Uxp-Service': 'BJ/GOV/DGI/TVM/SECUROUTE/v1',
+  asset_type: 'survey',
+  summary: {
+    row_count: 1,
+    languages: [],
+    default_translation: null,
+    geo: false,
+    lock_all: false,
+    lock_any: false,
+    labels: ['TES'],
+    columns: ['type', 'label', 'required'],
+    name_quality: {
+      firsts: {
+        ok: {
+          name: 'TES',
+          index: 1,
+          label: ['TES'],
+        },
+      },
+      bad: 0,
+      ok: 1,
+      good: 0,
+      total: 1,
+    },
   },
-};
-const requestConfig3: AxiosRequestConfig = {
-  headers: {
-    'Uxp-Client': 'BJ/GOV/PNS/PRE-PROD-PORTAIL',
-    'Uxp-Service': 'BJ/GOV/DGI/TVM/Liquidation_TVM/v1',
+  date_created: '2023-11-26T07:03:21.346195Z',
+  date_modified: '2023-12-13T19:43:03.534068Z',
+  date_deployed: '2023-12-13T19:42:30.549898Z',
+  version_id: 'vBpbzdWvLjeYkvgCZjgEy7',
+  version__content_hash: 'e60246e677f74b7dca9b51a5ce4f29c44da043ca',
+  version_count: 3,
+  has_deployment: true,
+  deployed_version_id: 'vQUox28YWQQFCBFSdJz6wZ',
+  deployed_versions: {
+    count: 1,
+    next: null,
+    previous: null,
+    results: [
+      {
+        uid: 'vQUox28YWQQFCBFSdJz6wZ',
+        url: 'http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva/versions/vQUox28YWQQFCBFSdJz6wZ/',
+        content_hash: 'e60246e677f74b7dca9b51a5ce4f29c44da043ca',
+        date_deployed: '2023-12-13T19:42:30.547675Z',
+        date_modified: '2023-12-13T19:42:30.547675Z',
+      },
+    ],
   },
-};
-const requestEtatVehicule: AxiosRequestConfig = {
-  headers: {
-    'Uxp-Client': 'BJ/GOV/PNS/PRE-PROD-PORTAIL',
-    'Uxp-Service': 'BJ/GOV/CNSR/SECUROUTE/etatvoiture/v1',
+  deployment__identifier:
+    'http://kc.kobo.local/super_admin/forms/aErx3mPyq96uzEM4Y9anva',
+  deployment__links: {
+    url: 'http://ee.kobo.local/lbFqI13J',
+    single_url: 'http://ee.kobo.local/single/lbFqI13J',
+    single_once_url:
+      'http://ee.kobo.local/single/8c4b0fe4ae106562c443a6834b4998f4',
+    offline_url: 'http://ee.kobo.local/x/lbFqI13J',
+    preview_url: 'http://ee.kobo.local/preview/lbFqI13J',
+    iframe_url: 'http://ee.kobo.local/i/lbFqI13J',
+    single_iframe_url: 'http://ee.kobo.local/single/i/lbFqI13J',
+    single_once_iframe_url:
+      'http://ee.kobo.local/single/i/8c4b0fe4ae106562c443a6834b4998f4',
   },
+  deployment__active: true,
+  deployment__data_download_links: {
+    xls_legacy:
+      'http://kc.kobo.local/super_admin/exports/aErx3mPyq96uzEM4Y9anva/xls/',
+    csv_legacy:
+      'http://kc.kobo.local/super_admin/exports/aErx3mPyq96uzEM4Y9anva/csv/',
+    zip_legacy:
+      'http://kc.kobo.local/super_admin/exports/aErx3mPyq96uzEM4Y9anva/zip/',
+    kml_legacy:
+      'http://kc.kobo.local/super_admin/exports/aErx3mPyq96uzEM4Y9anva/kml/',
+    xls: 'http://kc.kobo.local/super_admin/reports/aErx3mPyq96uzEM4Y9anva/export.xlsx',
+    csv: 'http://kc.kobo.local/super_admin/reports/aErx3mPyq96uzEM4Y9anva/export.csv',
+  },
+  deployment__submission_count: 0,
+  deployment_status: 'deployed',
+  report_styles: {
+    default: {},
+    specified: {
+      end: {},
+      start: {},
+      lb5kt26: {},
+    },
+    kuid_names: {
+      end: '9Jz8sPzKh',
+      start: 'yZf8FVfwb',
+      lb5kt26: 'lb5kt26',
+    },
+  },
+  report_custom: {},
+  advanced_features: {},
+  advanced_submission_schema: {
+    type: 'object',
+    $description: 'no advanced features activated for this form',
+  },
+  analysis_form_json: {
+    engines: {},
+    additional_fields: [],
+  },
+  map_styles: {},
+  map_custom: {},
+  content: {
+    schema: '1',
+    survey: [
+      {
+        name: 'start',
+        type: 'start',
+        $kuid: 'yZf8FVfwb',
+        $qpath: 'start',
+        $xpath: 'start',
+        $autoname: 'start',
+      },
+      {
+        name: 'end',
+        type: 'end',
+        $kuid: '9Jz8sPzKh',
+        $qpath: 'end',
+        $xpath: 'end',
+        $autoname: 'end',
+      },
+      {
+        type: 'note',
+        $kuid: 'lb5kt26',
+        label: ['TES'],
+        $qpath: 'TES',
+        $xpath: 'TES',
+        required: false,
+        $autoname: 'TES',
+      },
+    ],
+    settings: {},
+    translated: ['label'],
+    translations: [null],
+  },
+  downloads: [
+    {
+      format: 'xls',
+      url: 'http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva.xls',
+    },
+    {
+      format: 'xml',
+      url: 'http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva.xml',
+    },
+  ],
+  embeds: [
+    {
+      format: 'xls',
+      url: 'http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva/xls/',
+    },
+    {
+      format: 'xform',
+      url: 'http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva/xform/',
+    },
+  ],
+  xform_link:
+    'http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva/xform/',
+  hooks_link:
+    'http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva/hooks/',
+  tag_string: '',
+  uid: 'aErx3mPyq96uzEM4Y9anva',
+  kind: 'asset',
+  xls_link: 'http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva/xls/',
+  name: 'DCE 2',
+  assignable_permissions: [
+    {
+      url: 'http://kf.kobo.local/api/v2/permissions/view_asset/',
+      label: 'Voir formulaire',
+    },
+    {
+      url: 'http://kf.kobo.local/api/v2/permissions/change_asset/',
+      label: 'Éditer formulaire',
+    },
+    {
+      url: 'http://kf.kobo.local/api/v2/permissions/manage_asset/',
+      label: 'Gérer projet',
+    },
+    {
+      url: 'http://kf.kobo.local/api/v2/permissions/add_submissions/',
+      label: 'Add submissions',
+    },
+    {
+      url: 'http://kf.kobo.local/api/v2/permissions/view_submissions/',
+      label: 'View submissions',
+    },
+    {
+      url: 'http://kf.kobo.local/api/v2/permissions/partial_submissions/',
+      label: {
+        default: 'Act on submissions only from specific users',
+        view_submissions: 'View submissions only from specific users',
+        change_submissions: 'Edit submissions only from specific users',
+        delete_submissions: 'Delete submissions only from specific users',
+        validate_submissions: 'Validate submissions only from specific users',
+      },
+    },
+    {
+      url: 'http://kf.kobo.local/api/v2/permissions/change_submissions/',
+      label: 'Edit submissions',
+    },
+    {
+      url: 'http://kf.kobo.local/api/v2/permissions/delete_submissions/',
+      label: 'Delete submissions',
+    },
+    {
+      url: 'http://kf.kobo.local/api/v2/permissions/validate_submissions/',
+      label: 'Validate submissions',
+    },
+  ],
+  permissions: [
+    {
+      url: 'http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva/permission-assignments/p8YoLMimhLHcq6sBKJqeUx/',
+      user: 'http://kf.kobo.local/api/v2/users/super_admin/',
+      permission: 'http://kf.kobo.local/api/v2/permissions/add_submissions/',
+      label: 'Add submissions',
+    },
+    {
+      url: 'http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva/permission-assignments/p3smCYtXfbz4QfeV9zs7V5/',
+      user: 'http://kf.kobo.local/api/v2/users/super_admin/',
+      permission: 'http://kf.kobo.local/api/v2/permissions/change_asset/',
+      label: 'Éditer formulaire',
+    },
+    {
+      url: 'http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva/permission-assignments/pNYbzsEznZYgdhwRXAwRJx/',
+      user: 'http://kf.kobo.local/api/v2/users/super_admin/',
+      permission: 'http://kf.kobo.local/api/v2/permissions/change_submissions/',
+      label: 'Edit submissions',
+    },
+    {
+      url: 'http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva/permission-assignments/p36L6nUPVLkjpfksq6CnkK/',
+      user: 'http://kf.kobo.local/api/v2/users/super_admin/',
+      permission: 'http://kf.kobo.local/api/v2/permissions/delete_submissions/',
+      label: 'Delete submissions',
+    },
+    {
+      url: 'http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva/permission-assignments/p4XKCzcBTTemLkLeZd2yAB/',
+      user: 'http://kf.kobo.local/api/v2/users/super_admin/',
+      permission: 'http://kf.kobo.local/api/v2/permissions/manage_asset/',
+      label: 'Gérer projet',
+    },
+    {
+      url: 'http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva/permission-assignments/pDYUmKeuautCfivGGamijd/',
+      user: 'http://kf.kobo.local/api/v2/users/super_admin/',
+      permission:
+        'http://kf.kobo.local/api/v2/permissions/validate_submissions/',
+      label: 'Validate submissions',
+    },
+    {
+      url: 'http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva/permission-assignments/pNSdCohv4xSrW6tkbCrg5n/',
+      user: 'http://kf.kobo.local/api/v2/users/super_admin/',
+      permission: 'http://kf.kobo.local/api/v2/permissions/view_asset/',
+      label: 'Voir formulaire',
+    },
+    {
+      url: 'http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva/permission-assignments/pGrySRJpC4pKcKc4A4TTZx/',
+      user: 'http://kf.kobo.local/api/v2/users/super_admin/',
+      permission: 'http://kf.kobo.local/api/v2/permissions/view_submissions/',
+      label: 'View submissions',
+    },
+  ],
+  effective_permissions: [
+    {
+      codename: 'view_submissions',
+    },
+    {
+      codename: 'change_asset',
+    },
+    {
+      codename: 'change_submissions',
+    },
+    {
+      codename: 'delete_asset',
+    },
+    {
+      codename: 'manage_asset',
+    },
+    {
+      codename: 'validate_submissions',
+    },
+    {
+      codename: 'view_asset',
+    },
+    {
+      codename: 'add_submissions',
+    },
+    {
+      codename: 'delete_submissions',
+    },
+  ],
+  exports: 'http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva/exports/',
+  export_settings: [],
+  data: 'http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva/data/',
+  children: {
+    count: 0,
+  },
+  subscribers_count: 0,
+  status: 'private',
+  access_types: null,
+  data_sharing: {},
+  paired_data:
+    'http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva/paired-data/',
 };
 @Injectable()
 export class ClientService {
@@ -99,733 +369,20 @@ export class ClientService {
     }
   }
 
-  // CTTA pour Taxi.
-  typeVehicule(type: string): string {
-    switch (type) {
-      case 'CTVL':
-        return 'Véhicule Léger';
-      case 'CTPL':
-        return 'Véhicule Poids Lourd';
-      case 'CTTAXI':
-        return 'Taxi';
-    }
-  }
-  async getEtatVehicule(immatriculationNumber: string): Promise<any> {
-    this.logger.log('cnsr etat statut');
-    let message;
+  async dce() {
     const { data } = await firstValueFrom(
       this.httpService
-        .get<any>(
-          `http://pns-ss01.xroad.bj:8081/restapi/${immatriculationNumber}`,
-          requestEtatVehicule,
-        )
-        .pipe(
-          catchError((error: AxiosError) => {
-            switch (error.response.status) {
-              case 404:
-                message = {
-                  error: error.response.status,
-                  cause: 'cnsr not found',
-                };
-                console.log(error.response.status);
-
-              case 500:
-                console.log(error.response.status);
-                message = {
-                  error: error.response.status,
-                  cause: 'cnsr errror 500',
-                };
-
-              default:
-                throw new HttpException(
-                  error.response.statusText,
-                  error.response.status,
-                );
-            }
-          }),
-        ),
-    );
-    const isEmpty = Object.entries(data).length === 0;
-    console.log(isEmpty);
-    console.log(`data cnsr ${data[0]}`);
-
-    if (isEmpty) {
-      const response = {
-        agences: '',
-        typevehicule: '',
-        immatriculation: '',
-        dernieredate: '',
-        dateecheance: '',
-        periodevalidite: '',
-        idsequence: '',
-        message: {
-          error: '404',
-          cause: 'not found',
-        },
-      };
-
-      return response;
-    } else {
-      const date = parse(data[0].dateecheance, 'yyyy-MM-dd', new Date());
-      const comparisonResultDesc = differenceInDays(date, new Date());
-      // check if technical visit date is correct
-      if (comparisonResultDesc >= 1000000000) {
-        const response = {
-          agences: '',
-          typevehicule: '',
-          immatriculation: '',
-          dernieredate: '',
-          dateecheance: '',
-          periodevalidite: '',
-          idsequence: '',
-          message: {
-            error: '401',
-            cause: '401 Unauthorize',
-          },
-        };
-
-        return response;
-      } else {
-        console.log(
-          `comparisonResultDesc: ${comparisonResultDesc}  ${date}  ${new Date()}`,
-        );
-        message = {
-          error: '200',
-          cause: 'all is good',
-        };
-        data[0].message = message;
-        return data[0];
-      }
-    }
-  }
-
-  async getVehiculeInfoFromAntt(immatriculationNumber: string): Promise<any> {
-    const { data } = await firstValueFrom(
-      this.httpService
-        .get<any>(
-          `http://pns-ss01.xroad.bj:8081/restapi/${immatriculationNumber}`,
-          anattConfig,
+        .put<any>(
+          `http://kf.kobo.local/api/v2/assets/aErx3mPyq96uzEM4Y9anva/`,
+          dataDce,
+          dceHeader,
         )
         .pipe(
           catchError((error: AxiosError) =>
-            this.handleError(error, immatriculationNumber),
-          ),
-        ),
-    );
-    // console.log(Object.values(data).filter((res) => res != 'notPaid'));
-
-    return data;
-  }
-
-  async getPaiementStatut(
-    immatriculationNumber: string,
-    year: string,
-  ): Promise<any> {
-    this.logger.log('paiement statut');
-    const { data } = await firstValueFrom(
-      this.httpService
-        .get<any>(
-          `http://pns-ss01.xroad.bj:8081/restapi/${immatriculationNumber}/${year}`,
-          requestConfig,
-        )
-        .pipe(
-          catchError((error: AxiosError) =>
-            this.handleError(error, immatriculationNumber),
-          ),
-        ),
-    );
-    return data.object;
-  }
-  async getStatOfPay(immatriculationNumber: string): Promise<any> {
-    const { data } = await firstValueFrom(
-      this.httpService
-        .get<any>(
-          `http://pns-ss01.xroad.bj:8081/restapi/${immatriculationNumber}`,
-          requestConfig2,
-        )
-        .pipe(
-          catchError((error: AxiosError) =>
-            this.handleError(error, immatriculationNumber),
-          ),
-        ),
-    );
-    // console.log(Object.values(data).filter((res) => res != 'notPaid'));
-    const notPaid: Array<string> = [];
-    Object.keys(data).forEach((key) => {
-      if (data[key] == 'notPaid') {
-        notPaid.push(key);
-      }
-    });
-    return notPaid;
-  }
-  async liquidation(
-    immatriculationNumber: string,
-    marque: string,
-    year: string,
-  ): Promise<any> {
-    const { data } = await firstValueFrom(
-      this.httpService
-        .get<any>(
-          `http://pns-ss01.xroad.bj:8081/restapi/${immatriculationNumber}/${marque}/${year}`,
-          requestConfig3,
-        )
-        .pipe(
-          catchError((error: AxiosError) =>
-            this.handleError(error, immatriculationNumber),
-          ),
-        ),
-    );
-    return {
-      data: data,
-      montantDu: data.object.montantDu,
-      penalite: data.object.penalite,
-      totalDu: data.object.montantDu + data.object.penalite,
-    };
-  }
-
-  async getCnsrTaxeWithoutTvm(immatriculationNumber: string): Promise<any> {
-    const cnsr = await this.getEtatVehicule(immatriculationNumber);
-    const {
-      typevehicule,
-      dernieredate,
-      dateecheance,
-      periodevalidite,
-      agences,
-      idsequence,
-    } = cnsr;
-    const datepay = formatRFC3339(new Date());
-    const { taxe, tresor, cnsr_taxe, penalite_taxe, total } = calcultaxe(
-      dateecheance,
-      typevehicule,
-    );
-    const libelleTypeVehicule = this.typeVehicule(typevehicule);
-    const netPayer = total.toFixed();
-    return {
-      cnsr,
-      datepay,
-      taxe,
-      tresor,
-      cnsr_taxe,
-      penalite_taxe,
-      netPayer,
-      typevehicule,
-      dernieredate,
-      dateecheance,
-      periodevalidite,
-      agences,
-      idsequence,
-      libelleTypeVehicule,
-    };
-  }
-  async getAllTvmAmount(immatriculationNumber: string, marque: string) {
-    let year = await this.getStatOfPay(immatriculationNumber);
-    year = year.sort((a, b) => b - a);
-    console.log(year);
-    const fiscale: Array<any> = [];
-    let infoLiquidation: any;
-
-    for (let i = 0; i < year.length; i++) {
-      try {
-        const r = await this.liquidation(
-          immatriculationNumber,
-          marque,
-          year[i],
-        );
-        const data = {
-          amount: r['totalDu'],
-          penalite: r['penalite'],
-          montantDu: r['montantDu'],
-          year: year[i],
-        };
-        console.log(data);
-
-        fiscale.push(data);
-        infoLiquidation = r;
-      } catch (error) {
-        console.log(error.message);
-      }
-
-      // this.liquidation(immatriculationNumber, marque, year[i]);
-    }
-    console.log(infoLiquidation.data.object.vehicule.poidsCharge);
-
-    console.log(fiscale[0]);
-
-    // eslint-disable-next-line prefer-const
-    let { amount, penalite, montantDu } = fiscale[0];
-    amount = amount.toFixed(0);
-    penalite = penalite.toFixed(0);
-    montantDu = montantDu.toFixed(0);
-    const year_tvm = fiscale[0]['year'];
-    const d = new Date();
-    const fullYear = d.getFullYear();
-    if (year_tvm != fullYear) {
-      amount = 0;
-      penalite = 0;
-      montantDu = 0;
-    }
-
-    const {
-      puissanceMoteur,
-      chassis,
-      dateMiseEnCirculation,
-      dateImmatriculation,
-      immatricuation,
-      nombreDePlace,
-      poidsCharge,
-      poidsVide,
-      poidsUtile,
-    } = infoLiquidation['data']['object']['vehicule'];
-    const cnsr = await this.getEtatVehicule(immatriculationNumber);
-    const {
-      typevehicule,
-      dernieredate,
-      dateecheance,
-      periodevalidite,
-      agences,
-      idsequence,
-    } = cnsr;
-    const datepay = formatRFC3339(new Date());
-    const { taxe, tresor, cnsr_taxe, penalite_taxe, total } = calcultaxe(
-      dateecheance,
-      typevehicule,
-    );
-    const libelleTypeVehicule = this.typeVehicule(typevehicule);
-    const netPayer = (total + parseInt(amount)).toFixed();
-    return {
-      datepay,
-      year_tvm,
-      netPayer,
-      penalite_taxe,
-      libelleTypeVehicule,
-      taxe,
-      tresor,
-      cnsr_taxe,
-      total,
-      puissanceMoteur,
-      chassis,
-      dateMiseEnCirculation,
-      dateImmatriculation,
-      immatricuation,
-      nombreDePlace,
-      poidsCharge,
-      poidsVide,
-      poidsUtile,
-      amount,
-      penalite,
-      montantDu,
-      fiscale,
-      typevehicule,
-      dernieredate,
-      dateecheance,
-      periodevalidite,
-      agences,
-      idsequence,
-      infoLiquidation,
-    };
-  }
-
-  async getAllTvmAmount2(immatriculationNumber: string) {
-    let year = await this.getStatOfPay(immatriculationNumber);
-    year = year.sort((a, b) => b - a);
-    console.log(year);
-    const fiscale: Array<any> = [];
-
-    const amount = 0;
-    const penalite = 0;
-    const montantDu = 0;
-    const cnsr = await this.getEtatVehicule(immatriculationNumber);
-    const {
-      typevehicule,
-      dernieredate,
-      dateecheance,
-      periodevalidite,
-      agences,
-      idsequence,
-    } = cnsr;
-    const datepay = formatRFC3339(new Date());
-    const { taxe, tresor, cnsr_taxe, penalite_taxe, total } = calcultaxe(
-      dateecheance,
-      typevehicule,
-    );
-    const libelleTypeVehicule = this.typeVehicule(typevehicule);
-    const netPayer = total.toFixed();
-    const infoVehicule = await this.getVehiculeInfoFromAntt(
-      immatriculationNumber,
-    );
-    const chassis = infoVehicule['nchassis'];
-    const puissanceMoteur = infoVehicule['npuissance'];
-    const dateMiseEnCirculation = infoVehicule['datedemiseencirculation'];
-    const dateImmatriculation = infoVehicule['dateimmatriculation'];
-    const nombreDePlace = infoVehicule['nbreplace'];
-    const poidsCharge = infoVehicule['npoidstotalencharge'];
-    const poidsVide = infoVehicule['nPoidsavide'];
-    const poidsUtile = 0;
-    // const sMarque = infoVehicule['sMarque'];
-    const infoLiquidation = {
-      data: {
-        object: {
-          vehicule: {
-            marque: infoVehicule['sMarque'],
-          },
-        },
-      },
-    };
-    return {
-      puissanceMoteur,
-      dateMiseEnCirculation,
-      dateImmatriculation,
-      nombreDePlace,
-      poidsCharge,
-      poidsVide,
-      poidsUtile,
-      chassis,
-      datepay,
-      netPayer,
-      penalite_taxe,
-      libelleTypeVehicule,
-      taxe,
-      tresor,
-      cnsr_taxe,
-      total,
-      amount,
-      penalite,
-      montantDu,
-      fiscale,
-      typevehicule,
-      dernieredate,
-      dateecheance,
-      periodevalidite,
-      agences,
-      idsequence,
-      infoLiquidation,
-    };
-  }
-  async refersToRightsFunction(
-    immatriculationNumber: string,
-    marque: string,
-  ): Promise<any> {
-    const year = await this.getStatOfPay(immatriculationNumber);
-    console.log(`refersToRightsFunction ${year}`);
-
-    if (year.length != 0) {
-      return await this.getAllTvmAmount(immatriculationNumber, marque);
-    } else {
-      return await this.getAllTvmAmount2(immatriculationNumber);
-    }
-  }
-  async notifyerCnsr(cnsrObject: CnsrObject): Promise<any> {
-    const datevisite = new Date().toISOString().split('T')[0];
-    cnsrObject.datevisite = datevisite;
-    cnsrObject.datevalidite = getValidateDate(
-      cnsrObject.typevehicule,
-      datevisite,
-    );
-
-    console.log(
-      `ArraycnsrObject ${cnsrObject.datevalidite} eee ${cnsrObject.datevalidite}`,
-    );
-    console.log(`datevisite ${datevisite}`);
-
-    const ArraycnsrObject = [];
-    ArraycnsrObject.push(cnsrObject);
-
-    const { data } = await firstValueFrom(
-      this.httpService
-        .post<any>(
-          `http://137.255.9.45:8000/api/savevehicule`,
-          ArraycnsrObject,
-          // cnsrNotifyHeader,
-        )
-        .pipe(
-          catchError((error: AxiosError) =>
-            this.handleError(error, cnsrObject.immatriculation),
-          ),
-        ),
-    );
-
-    const response = {
-      cnsr: data,
-      datevisite: cnsrObject.datevisite,
-      datevalidite: cnsrObject.datevalidite,
-      typevehicule: cnsrObject.typevehicule,
-    };
-    console.log(`data ${data.message} ${response}`);
-    return response;
-  }
-
-  async notifyerDgi(dgiObject: DgiObject): Promise<any> {
-    dgiObject.datePaiement = new Date();
-    const { data } = await firstValueFrom(
-      this.httpService
-        .post<any>(
-          `https://backendtvmmobile.impots.bj/api/paiement/e-visite-notification`,
-          dgiObject,
-          dgiNotifyHeader,
-        )
-        .pipe(
-          catchError((error: AxiosError) =>
-            this.handleError(error, dgiObject.immatriculation),
+            this.handleError(error, 'cnsrObject.immatriculation'),
           ),
         ),
     );
     console.log(data);
-
-    return data;
-  }
-  async getAllTvmAmountVehiculeNeuf(
-    immatriculationNumber: string,
-    marque: string,
-    typevehicule: string,
-  ) {
-    const fiscale: Array<any> = [];
-
-    const amount = 0;
-    const penalite = 0;
-    const montantDu = 0;
-    // const cnsr = await this.getEtatVehicule(immatriculationNumber);
-    // const {
-    //   typevehicule,
-    //   dernieredate,
-    //   dateecheance,
-    //   periodevalidite,
-    //   agences,
-    //   idsequence,
-    // } = cnsr;
-    const datepay = formatRFC3339(new Date());
-    const { taxe, tresor, cnsr_taxe, penalite_taxe, total } = calcultaxe(
-      'first',
-      typevehicule,
-    );
-    const libelleTypeVehicule = this.typeVehicule(typevehicule);
-    const netPayer = total.toFixed();
-    const infoVehicule = await this.getVehiculeInfoFromAntt(
-      immatriculationNumber,
-    );
-    const chassis = infoVehicule['nchassis'];
-    const puissanceMoteur = infoVehicule['npuissance'];
-    const dateMiseEnCirculation = infoVehicule['datedemiseencirculation'];
-    const dateImmatriculation = infoVehicule['dateimmatriculation'];
-    const nombreDePlace = infoVehicule['nbreplace'];
-    const poidsCharge = infoVehicule['npoidstotalencharge'];
-    const poidsVide = infoVehicule['nPoidsavide'];
-    const poidsUtile = 0;
-    // const sMarque = infoVehicule['sMarque'];
-    const infoLiquidation = {
-      data: {
-        object: {
-          vehicule: {
-            marque: infoVehicule['sMarque'],
-          },
-        },
-      },
-    };
-    return {
-      puissanceMoteur,
-      dateMiseEnCirculation,
-      dateImmatriculation,
-      nombreDePlace,
-      poidsCharge,
-      poidsVide,
-      poidsUtile,
-      chassis,
-      datepay,
-      netPayer,
-      penalite_taxe,
-      libelleTypeVehicule,
-      taxe,
-      tresor,
-      cnsr_taxe,
-      total,
-      amount,
-      penalite,
-      montantDu,
-      fiscale,
-      typevehicule,
-      // dernieredate,
-      // dateecheance,
-      // periodevalidite,
-      // agences,
-      // idsequence,
-      infoLiquidation,
-    };
-  }
-  async getAllTvmAmountWithoutCnsrApi(
-    immatriculationNumber: string,
-    marque: string,
-    typevehicule: string,
-  ) {
-    let year = await this.getStatOfPay(immatriculationNumber);
-    year = year.sort((a, b) => b - a);
-    console.log(year);
-    const fiscale: Array<any> = [];
-    let infoLiquidation: any;
-    for (let i = 0; i < year.length; i++) {
-      try {
-        const r = await this.liquidation(
-          immatriculationNumber,
-          marque,
-          year[i],
-        );
-        const data = {
-          amount: r['totalDu'],
-          penalite: r['penalite'],
-          montantDu: r['montantDu'],
-          year: year[i],
-        };
-        console.log(data);
-
-        fiscale.push(data);
-        infoLiquidation = r;
-      } catch (error) {
-        console.log(error.message);
-      }
-
-      // this.liquidation(immatriculationNumber, marque, year[i]);
-    }
-    console.log(infoLiquidation.data.object.vehicule.poidsCharge);
-
-    // const cnsr = await this.getEtatVehicule(immatriculationNumber);
-    console.log(fiscale[0]);
-
-    // eslint-disable-next-line prefer-const
-    let { amount, penalite, montantDu } = fiscale[0];
-    amount = amount.toFixed(0);
-    penalite = penalite.toFixed(0);
-    montantDu = montantDu.toFixed(0);
-    const year_tvm = fiscale[0]['year'];
-    const d = new Date();
-    const fullYear = d.getFullYear();
-    if (year_tvm != fullYear) {
-      amount = 0;
-      penalite = 0;
-      montantDu = 0;
-    }
-
-    const {
-      puissanceMoteur,
-      chassis,
-      dateMiseEnCirculation,
-      dateImmatriculation,
-      immatricuation,
-      nombreDePlace,
-      poidsCharge,
-      poidsVide,
-      poidsUtile,
-    } = infoLiquidation['data']['object']['vehicule'];
-    // const { dernieredate, periodevalidite, agences, idsequence } = cnsr;
-
-    const { taxe, tresor, cnsr_taxe, penalite_taxe, total } = calcultaxe(
-      'first',
-      typevehicule,
-    );
-    const libelleTypeVehicule = this.typeVehicule(typevehicule);
-    const netPayer = (total + parseInt(amount)).toFixed();
-    const datepay = formatRFC3339(new Date());
-    return {
-      // cnsr,
-      datepay,
-      year_tvm,
-      netPayer,
-      penalite_taxe,
-      libelleTypeVehicule,
-      taxe,
-      tresor,
-      cnsr_taxe,
-      total,
-      puissanceMoteur,
-      chassis,
-      dateMiseEnCirculation,
-      dateImmatriculation,
-      immatricuation,
-      nombreDePlace,
-      poidsCharge,
-      poidsVide,
-      poidsUtile,
-      amount,
-      penalite,
-      montantDu,
-      fiscale,
-      typevehicule,
-      // dernieredate,
-      // periodevalidite,
-      // agences,
-      // idsequence,
-      infoLiquidation,
-    };
-  }
-
-  async getTaxeCnsr(
-    immatriculationNumber: string,
-    typevehiculeForTaxe: string,
-  ): Promise<any> {
-    const cnsr = await this.getEtatVehicule(immatriculationNumber);
-    let dateForTaxe = '';
-    const {
-      typevehicule,
-      dernieredate,
-      dateecheance,
-      periodevalidite,
-      agences,
-      idsequence,
-    } = cnsr;
-    if (dateecheance === '') {
-      dateForTaxe = 'first';
-    }
-    if (typevehicule != '') {
-      typevehiculeForTaxe = typevehicule;
-    }
-    dateForTaxe = dateecheance;
-    const { taxe, tresor, cnsr_taxe, penalite_taxe, total } = calcultaxe(
-      dateForTaxe,
-      typevehiculeForTaxe,
-    );
-    const amount = total.toFixed();
-    return {
-      typevehicule,
-      dernieredate,
-      dateecheance,
-      periodevalidite,
-      agences,
-      idsequence,
-      taxe,
-      tresor,
-      cnsr_taxe,
-      penalite_taxe,
-      total,
-      amount,
-    };
-  }
-
-  async refersToRightsFunctionWithoutCnsrApi(
-    immatriculationNumber: string,
-    marque: string,
-    typevehicule: string,
-  ): Promise<any> {
-    const year = await this.getStatOfPay(immatriculationNumber);
-    console.log(
-      `refersToRightsFunctionWithoutCnsrApi ${immatriculationNumber}`,
-    );
-
-    if (year.length != 0) {
-      console.log(
-        `refersToRightsFunctionWithoutCnsrApi getAllTvmAmountWithoutCnsrApi${immatriculationNumber}`,
-      );
-      return await this.getAllTvmAmountWithoutCnsrApi(
-        immatriculationNumber,
-        marque,
-        typevehicule,
-      );
-    } else {
-      console.log(
-        `getAllTvmAmountVehiculeNeuf getAllTvmAmountWithoutCnsrApi${immatriculationNumber}`,
-      );
-
-      return await this.getAllTvmAmountVehiculeNeuf(
-        immatriculationNumber,
-        marque,
-        typevehicule,
-      );
-    }
   }
 }
